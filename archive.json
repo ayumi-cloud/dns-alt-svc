@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-03-02T21:25:04.600544+00:00",
+  "timestamp": "2021-03-15T19:17:41.229886+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -19830,7 +19830,7 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDk2NjUwMDI3",
       "title": "Proposal: Simplify SvcParamKey registration policy",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/262",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -19839,17 +19839,19 @@
       ],
       "body": "This change removes the First Come First Served registration policy\r\nand the Expert Review policy, and combines them into a single\r\nSpecification Required range, with guidelines for what constitutes a\r\nminimal specification.  The goal of this change is to avoid zone file\r\nincompatibilities that could arise from the registration of keys whose\r\npresentation format is poorly documented.",
       "createdAt": "2020-10-02T02:53:17Z",
-      "updatedAt": "2021-02-24T16:40:41Z",
+      "updatedAt": "2021-03-15T19:16:55Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1515e3d3124a10c85d71664eb6ad470a7a97d995",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-iana",
       "headRefOid": "99910fcc0b746463d4186e2719f7c9ce6e5b3506",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-03-15T19:16:51Z",
+      "mergedAt": "2021-03-15T19:16:51Z",
+      "mergedBy": "bemasc",
+      "mergeCommit": {
+        "oid": "25f908144dc49d1cb3b91f90bd1f4ca453a84a12"
+      },
       "comments": [
         {
           "author": "bemasc",
@@ -19913,6 +19915,20 @@
           "body": "I contacted an IANA representative and got some advice on how this works,as well as [this example](https://www.iana.org/assignments/websocket/websocket.xhtml#subprotocol-name) of a relatively recent registry that seems to be working well.  On that basis, I've changed this to FCFS and attempted to clarify the Reference requirement (now \"Format Reference\").",
           "createdAt": "2021-02-23T20:26:53Z",
           "updatedAt": "2021-02-23T20:26:53Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@tfpauly Please review.",
+          "createdAt": "2021-03-03T21:37:10Z",
+          "updatedAt": "2021-03-03T21:37:10Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@bemasc looks good to me, thanks!",
+          "createdAt": "2021-03-14T17:31:17Z",
+          "updatedAt": "2021-03-14T17:31:17Z"
         }
       ],
       "reviews": [
@@ -20035,6 +20051,32 @@
               "updatedAt": "2021-02-24T16:40:41Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjExNzE5NTA5",
+          "commit": {
+            "abbreviatedOid": "99910fc"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-14T17:31:25Z",
+          "updatedAt": "2021-03-14T17:31:25Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjEyNTUxMjA4",
+          "commit": {
+            "abbreviatedOid": "99910fc"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-15T19:05:50Z",
+          "updatedAt": "2021-03-15T19:05:50Z",
+          "comments": []
         }
       ]
     },
@@ -23512,7 +23554,7 @@
       "labels": [],
       "body": "See #298 and https://github.com/tlswg/draft-ietf-tls-esni/pull/391",
       "createdAt": "2021-02-26T20:13:37Z",
-      "updatedAt": "2021-02-26T23:58:10Z",
+      "updatedAt": "2021-03-15T19:16:30Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "ca7b0236cedc4f2c1dda1e63d8152f52b81d31ed",
@@ -23551,6 +23593,20 @@
           "body": "As a practical matter, I don't think we need to go through a deprecation procedure.  The \"echconfig\" contents are defined by a draft (draft-ietf-tls-esni) that is not finished, and indeed has multiple breaking changes in progress.  I don't think anyone who is using \"echconfig\" in a zone today expects it to be interoperable.  The only deployment I'm aware of exists specifically for interoperability testing of draft versions of ECH, and that is the only appropriate use at this stage.\r\n\r\nAs for the Early Allocation rules, note that \"echconfig\" is not part of the SVCB draft standard presentation format.  Rather, it is a proposed entry in an IANA registry that doesn't exist yet.\r\n\r\nWhile I think it's annoying to have to burn a codepoint in order to change the name, I'm happy to do so if necessary.  If that's the consensus, I think we might as well wait until the ECH draft is final before making any change, to avoid having to do this again.",
           "createdAt": "2021-02-26T23:58:10Z",
           "updatedAt": "2021-02-26T23:58:10Z"
+        },
+        {
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "body": "How do we get to consensus here?  Options seem to be:\r\n\r\n1. Stick with echconfig and current codepoint.  (Not preferable.)\r\n2. Switch to ech and use new codepoint.   (Burns a codepoint, not strictly necessary.)\r\n3. Switch to ech and keep existing codepoint.   (Changes the presentation to wire format mapping of an existing codepoint.)\r\n\r\nI could go with either 2/3.  @marka63 seems to strongly prefer 2.  @bemasc seems to strongly prefer 3.\r\n",
+          "createdAt": "2021-03-15T19:11:01Z",
+          "updatedAt": "2021-03-15T19:11:01Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I am fine with any of these three things.  From most preferred to least: 3, 1, 2.  My main point is that, if we go with 2, we should delay the switch as long as possible, to wait until after any possible compatibility-breaking changes in ECH.  (Whereas if we go with 3, we should do it as soon as possible to minimize disruption.)",
+          "createdAt": "2021-03-15T19:16:30Z",
+          "updatedAt": "2021-03-15T19:16:30Z"
         }
       ],
       "reviews": [
@@ -23568,6 +23624,40 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 301,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTgzMzUzMTA5",
+      "title": "Remove all shortnames for RFC references",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/301",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I surveyed the ten most recent RFCs, and many of them use shortname\r\nreferences, but not for RFCs.",
+      "createdAt": "2021-03-02T21:25:15Z",
+      "updatedAt": "2021-03-13T18:34:10Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "ca7b0236cedc4f2c1dda1e63d8152f52b81d31ed",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-rfc",
+      "headRefOid": "92225e11623cce8fb41f58dba30c96aed9bdbd50",
+      "closedAt": "2021-03-13T18:34:10Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "It looks like RFC 8470 is an example that _does_ use shortnames for RFCs, so there's not a clear rule against this.  I think we can leave this as-is until closer to publication.",
+          "createdAt": "2021-03-13T18:34:10Z",
+          "updatedAt": "2021-03-13T18:34:10Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
