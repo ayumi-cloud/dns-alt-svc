@@ -5,9 +5,9 @@
 DNSOP Working Group                                          B. Schwartz
 Internet-Draft                                                    Google
 Intended status: Standards Track                               M. Bishop
-Expires: 28 August 2021                                        E. Nygren
+Expires: 16 September 2021                                     E. Nygren
                                                      Akamai Technologies
-                                                        24 February 2021
+                                                           15 March 2021
 
 
  Service binding and parameter specification via the DNS (DNS SVCB and
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 August 2021.
+   This Internet-Draft will expire on 16 September 2021.
 
 Copyright Notice
 
@@ -1616,73 +1616,69 @@ Table of Contents
 
    A registration MUST include the following fields:
 
-   *  Number: SvcParamKey wire format numeric identifier (range 0-65535)
+   *  Number: wire format numeric identifier (range 0-65535)
 
-   *  Name: SvcParamKey presentation name
+   *  Name: unique presentation name
 
    *  Meaning: a short description
 
-   *  Pointer to specification text
+   *  Format Reference: pointer to specification text
 
-   SvcParamKey entries to be added to this namespace have different
-   policies ([RFC8126], Section 4) based on their range:
+   The characters in the registered Name MUST be lower-case alphanumeric
+   or "-" (Section 2.1) and it MUST NOT start with "key".
 
-                 +=============+=========================+
-                 | Number      | IANA Policy             |
-                 +=============+=========================+
-                 | 0-255       | Standards Action        |
-                 +-------------+-------------------------+
-                 | 256-32767   | Expert Review           |
-                 +-------------+-------------------------+
-                 | 32768-65280 | First Come First Served |
-                 +-------------+-------------------------+
-                 | 65280-65534 | Private Use             |
-                 +-------------+-------------------------+
-                 | 65535       | Standards Action        |
-                 +-------------+-------------------------+
+   Entries in this registry are subject to a First Come First Served
+   registration policy ([RFC8126], Section 4.6).  The Format Reference
+   MUST specify how to convert the SvcParamValue's presentation format
+   to wire format and MAY detail its intended meaning and use.  An entry
+   MAY specify a Format Reference of the form "Same as (other key Name)"
+   if it uses the same presentation and wire formats as an existing key.
 
-                                  Table 1
-
-   Apart from the initial contents, the SvcParamKey name MUST NOT start
-   with "key".
+   This arrangement supports the development of new parameters while
+   ensuring that zone files can be made interoperable.
 
 14.3.2.  Initial contents
 
    The "Service Binding (SVCB) Parameter Registry" shall initially be
    populated with the registrations below:
 
-   +=============+=================+======================+===========+
-   | Number      | Name            | Meaning              | Reference |
-   +=============+=================+======================+===========+
-   | 0           | mandatory       | Mandatory keys in    | (This     |
-   |             |                 | this RR              | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 1           | alpn            | Additional supported | (This     |
-   |             |                 | protocols            | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 2           | no-default-alpn | No support for       | (This     |
-   |             |                 | default protocol     | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 3           | port            | Port for alternative | (This     |
-   |             |                 | endpoint             | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 4           | ipv4hint        | IPv4 address hints   | (This     |
-   |             |                 |                      | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 5           | echconfig       | Encrypted            | (This     |
-   |             |                 | ClientHello info     | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 6           | ipv6hint        | IPv6 address hints   | (This     |
-   |             |                 |                      | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 65280-65534 | keyNNNNN        | Private Use          | (This     |
-   |             |                 |                      | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 65535       | key65535        | Reserved ("Invalid   | (This     |
-   |             |                 | key")                | document) |
-   +-------------+-----------------+----------------------+-----------+
+   +=============+=================+================+=================+
+   | Number      | Name            | Meaning        | Format          |
+   |             |                 |                | Reference       |
+   +=============+=================+================+=================+
+   | 0           | mandatory       | Mandatory keys | (This document) |
+   |             |                 | in this RR     | Section 7       |
+   +-------------+-----------------+----------------+-----------------+
+   | 1           | alpn            | Additional     | (This document) |
+   |             |                 | supported      | Section 6.1     |
+   |             |                 | protocols      |                 |
+   +-------------+-----------------+----------------+-----------------+
+   | 2           | no-default-alpn | No support for | (This document) |
+   |             |                 | default        | Section 6.1     |
+   |             |                 | protocol       |                 |
+   +-------------+-----------------+----------------+-----------------+
+   | 3           | port            | Port for       | (This document) |
+   |             |                 | alternative    | Section 6.2     |
+   |             |                 | endpoint       |                 |
+   +-------------+-----------------+----------------+-----------------+
+   | 4           | ipv4hint        | IPv4 address   | (This document) |
+   |             |                 | hints          | Section 6.4     |
+   +-------------+-----------------+----------------+-----------------+
+   | 5           | echconfig       | Encrypted      | (This document) |
+   |             |                 | ClientHello    | Section 6.3     |
+   |             |                 | info           |                 |
+   +-------------+-----------------+----------------+-----------------+
+   | 6           | ipv6hint        | IPv6 address   | (This document) |
+   |             |                 | hints          | Section 6.4     |
+   +-------------+-----------------+----------------+-----------------+
+   | 65280-65534 | N/A             | Private Use    | (This document) |
+   +-------------+-----------------+----------------+-----------------+
+   | 65535       | invalid         | Reserved       | (This document) |
+   |             |                 | ("Invalid      |                 |
+   |             |                 | key")          |                 |
+   +-------------+-----------------+----------------+-----------------+
 
-                                 Table 2
+                                 Table 1
 
 14.4.  Registry updates
 
@@ -1698,7 +1694,7 @@ Table of Contents
    |       | Binding                                |                 |
    +-------+----------------------------------------+-----------------+
 
-                                 Table 3
+                                 Table 2
 
    Per [Attrleaf], please add the following entry to the DNS Underscore
    Global Scoped Entry Registry:
@@ -1709,7 +1705,7 @@ Table of Contents
        | HTTPS   | _https     | HTTPS SVCB info | (This document) |
        +---------+------------+-----------------+-----------------+
 
-                                 Table 4
+                                 Table 3
 
 15.  Acknowledgments and Related Proposals
 
@@ -1757,9 +1753,9 @@ Table of Contents
 
    [ECH]      Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
               Encrypted Client Hello", Work in Progress, Internet-Draft,
-              draft-ietf-tls-esni-09, 16 December 2020,
+              draft-ietf-tls-esni-10, 8 March 2021,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              esni-09.txt>.
+              esni-10.txt>.
 
    [HappyEyeballsV2]
               Schinazi, D. and T. Pauly, "Happy Eyeballs Version 2:
@@ -1987,7 +1983,7 @@ Appendix B.  HTTP Mapping Summary
             |                          | upgrade              |
             +--------------------------+----------------------+
 
-                                  Table 5
+                                  Table 4
 
    This table does not indicate any SvcParamKeys that servers are
    required to publish, or that clients are required to implement,
