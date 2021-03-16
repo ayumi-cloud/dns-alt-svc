@@ -5,9 +5,9 @@
 DNSOP Working Group                                          B. Schwartz
 Internet-Draft                                                    Google
 Intended status: Standards Track                               M. Bishop
-Expires: 16 September 2021                                     E. Nygren
+Expires: 17 September 2021                                     E. Nygren
                                                      Akamai Technologies
-                                                           15 March 2021
+                                                           16 March 2021
 
 
  Service binding and parameter specification via the DNS (DNS SVCB and
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 September 2021.
+   This Internet-Draft will expire on 17 September 2021.
 
 Copyright Notice
 
@@ -689,8 +689,9 @@ Table of Contents
    If the client does use SVCB and named destinations, the client SHOULD
    follow the standard SVCB resolution process, selecting the smallest-
    SvcPriority option that is compatible with the client and the proxy.
-   The client SHOULD provide the final TargetName and port to the proxy,
-   which will perform any required A and AAAA lookups.
+   When connecting using a SVCB record, clients MUST provide the final
+   TargetName and port to the proxy, which will perform any required A
+   and AAAA lookups.
 
    Providing the proxy with the final TargetName has several benefits:
 
