@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-03-15T19:17:41.229886+00:00",
+  "timestamp": "2021-03-16T15:27:45.943676+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -23554,13 +23554,13 @@
       "labels": [],
       "body": "See #298 and https://github.com/tlswg/draft-ietf-tls-esni/pull/391",
       "createdAt": "2021-02-26T20:13:37Z",
-      "updatedAt": "2021-03-15T19:16:30Z",
+      "updatedAt": "2021-03-16T04:04:42Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
-      "baseRefOid": "ca7b0236cedc4f2c1dda1e63d8152f52b81d31ed",
+      "baseRefOid": "5a5a54676d99b1ee3dbd48de2a682b99fc6f6e1c",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-ech",
-      "headRefOid": "6814b028bf35179de65756767a4fd7a257ab12d6",
+      "headRefOid": "4f969692e5216dc88431bc028cda7b5355810312",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -23607,6 +23607,55 @@
           "body": "I am fine with any of these three things.  From most preferred to least: 3, 1, 2.  My main point is that, if we go with 2, we should delay the switch as long as possible, to wait until after any possible compatibility-breaking changes in ECH.  (Whereas if we go with 3, we should do it as soon as possible to minimize disruption.)",
           "createdAt": "2021-03-15T19:16:30Z",
           "updatedAt": "2021-03-15T19:16:30Z"
+        },
+        {
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "body": "What about going with 2, but leaving instructions for that switch to happen once TLS ECH passes its last-call? \r\nCan we do something like updating the text to use \"ech\" but leave the codepoint listed as \"to-be-assigned\"\r\nand then assign it shortly before publication?",
+          "createdAt": "2021-03-15T19:49:24Z",
+          "updatedAt": "2021-03-15T19:49:24Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@enygren That sounds complicated.  I don't know how to explain it to the RFC Editor, and I don't know what advice I would give to an implementer.  It seems a lot easier to just change nothing (which might be less confusing after s/ECHConfigs/ECHConfigList/).",
+          "createdAt": "2021-03-15T20:45:30Z",
+          "updatedAt": "2021-03-15T20:45:30Z"
+        },
+        {
+          "author": "davidben",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Changing nothing will remain confusing because ECH has a structure called ECHConfig, and that is *not* the structure that goes in SVCB. The intent hasn't been for SVCB to contain an ECHConfig since draft-ietf-tls-esni-07, the very first draft that used the ECH name. The \"echconfig\" name was a mistake from the beginning.\r\n\r\nGiven SVCB and ECH are getting published at different times, should the code point definition just be moved out of SVCB and into ECH? Though this is somewhat moot because, on the compatibility side, the ECHConfigList structure is already internally versioned.",
+          "createdAt": "2021-03-15T21:55:29Z",
+          "updatedAt": "2021-03-15T21:55:29Z"
+        },
+        {
+          "author": "bwelling",
+          "authorAssociation": "NONE",
+          "body": "An alternative solution could be to change the parameter name to `ech`, and support `echconfig` as an alias.  I think that would satisfy at least some backwards compatibility issues.",
+          "createdAt": "2021-03-16T00:33:36Z",
+          "updatedAt": "2021-03-16T00:33:36Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Most of the SVCB parameters are singular-name, multiple-value, so `echconfig=<ECHConfigList>` seems to fit the pattern.  However, I'm certainly happy to change it if it still seems confusing.\r\n\r\nMaintaining an alias is possible, but I would rank it lower than the other three options.  It makes \"echconfig\" different from all other parameters, it seems to create a permanent burden to deal with a temporary problem, and I'm not sure it actually satisfies the desire for zone-file compatibility with existing draft implementations.  (Of course, burning the codepoint is even worse for zone file compatibility.)",
+          "createdAt": "2021-03-16T02:00:00Z",
+          "updatedAt": "2021-03-16T02:00:00Z"
+        },
+        {
+          "author": "marka63",
+          "authorAssociation": "NONE",
+          "body": "You have already introduced incompatible changes with alpn comma escape processing.  All these incompatible changes are, in part, why BIND hasn't shipped a version which supports these record types despite the requests for them from our customers.\r\n\r\nWhether the type codes and mnemonics are already burnt or not I don't know.  Every vendor that has already shipped parsers could treat the changes as incompatible bug fixes and one could get away with it.  ",
+          "createdAt": "2021-03-16T03:04:38Z",
+          "updatedAt": "2021-03-16T03:04:38Z"
+        },
+        {
+          "author": "sayrer",
+          "authorAssociation": "NONE",
+          "body": "> How do we get to consensus here? Options seem to be:\r\n> \r\n> 1. Stick with echconfig and current codepoint.  (Not preferable.)\r\n> 2. Switch to ech and use new codepoint.   (Burns a codepoint, not strictly necessary.)\r\n> 3. Switch to ech and keep existing codepoint.   (Changes the presentation to wire format mapping of an existing codepoint.)\r\n> \r\n> I could go with either 2/3. @marka63 seems to strongly prefer 2. @bemasc seems to strongly prefer 3.\r\n\r\n3 is good, 2 is fine but seems a bit officious, and 1 seems kind of bad but livable.\r\n\r\nSo, they're all ok.",
+          "createdAt": "2021-03-16T04:04:42Z",
+          "updatedAt": "2021-03-16T04:04:42Z"
         }
       ],
       "reviews": [
@@ -23657,6 +23706,74 @@
           "updatedAt": "2021-03-13T18:34:10Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 302,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTkzMzYxNzM3",
+      "title": "s/ECHConfigs/ECHConfigList/",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/302",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "See #298 and tlswg/draft-ietf-tls-esni#391",
+      "createdAt": "2021-03-15T20:12:24Z",
+      "updatedAt": "2021-03-15T20:37:02Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "25f908144dc49d1cb3b91f90bd1f4ca453a84a12",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-echconfiglist",
+      "headRefOid": "bd2377203b9fa21d735e7f85014b4e4a27b21e74",
+      "closedAt": "2021-03-15T20:36:59Z",
+      "mergedAt": "2021-03-15T20:36:59Z",
+      "mergedBy": "bemasc",
+      "mergeCommit": {
+        "oid": "5a5a54676d99b1ee3dbd48de2a682b99fc6f6e1c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjEyNjE3NzE2",
+          "commit": {
+            "abbreviatedOid": "bd23772"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-15T20:31:31Z",
+          "updatedAt": "2021-03-15T20:31:31Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 303,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTk0MDA1NDIy",
+      "title": "Using TargetName to a proxy should be a MUST",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/303",
+      "state": "OPEN",
+      "author": "enygren",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "When using a proxy with a SVCB record, using TargetName is a \"MUST\" as otherwise a client\r\nmight attempt to use parameters from a SVCB record with the service name which \r\nwill not always work.",
+      "createdAt": "2021-03-16T15:27:29Z",
+      "updatedAt": "2021-03-16T15:27:29Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "5a5a54676d99b1ee3dbd48de2a682b99fc6f6e1c",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "enygren-proxy-targetname-must",
+      "headRefOid": "8d2698df539ec3e385cbd15666d03964f4dc603c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
