@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-03-16T15:27:45.943676+00:00",
+  "timestamp": "2021-03-17T14:41:51.137851+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -5503,6 +5503,24 @@
       "body": "Normative or Informative? there are both here.\r\n\r\nLine Numbers included. \r\n\r\n92:({{https}}) by avoiding the need for an Attrleaf label {{?Attrleaf=RFC8552}}\r\n332:follows the Attrleaf naming pattern {{Attrleaf}}, so the scheme MUST be\r\n981:By removing the Attrleaf labels {{?Attrleaf}}\r\n1366:For services other than HTTPS, the SVCB RR and an Attrleaf label {{?Attrleaf}}\r\n1394:Registry {{!Attrleaf}}.  The scheme SHOULD have an entry in the IANA URI Schemes\r\n1540:Per {{?Attrleaf}}, please add the following entry to the DNS Underscore",
       "createdAt": "2021-02-26T23:53:11Z",
       "updatedAt": "2021-02-26T23:53:11Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 305,
+      "id": "MDU6SXNzdWU4MzM0MjgxNjE=",
+      "title": "Why is the reserved key (65535) called \"invalid\"?",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/issues/305",
+      "state": "OPEN",
+      "author": "marka63",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "bemasc"
+      ],
+      "labels": [],
+      "body": "If the reserved key ever gets used having it be called \"invalid\" will cause interoperability problems because \"invalid\" doesn't have a well defined parsing method.  When you give a key a name it also requires a format definition to be specified otherwise you will have different parsers producing different results.\r\n\r\nI'm presuming if we ever get to the point where we need more named keys that these will end up being encoded, on the wire, inside this key.  If that happens we will need this key be printed out as key65535 whenever there is a unsupported named type inside this key and if they are all known they will be printed out individually.  The name \"invalid\" will never be used.",
+      "createdAt": "2021-03-17T05:53:58Z",
+      "updatedAt": "2021-03-17T14:27:39Z",
       "closedAt": null,
       "comments": []
     }
@@ -23551,10 +23569,12 @@
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "wg"
+      ],
       "body": "See #298 and https://github.com/tlswg/draft-ietf-tls-esni/pull/391",
       "createdAt": "2021-02-26T20:13:37Z",
-      "updatedAt": "2021-03-16T04:04:42Z",
+      "updatedAt": "2021-03-16T22:01:08Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "5a5a54676d99b1ee3dbd48de2a682b99fc6f6e1c",
@@ -23656,6 +23676,27 @@
           "body": "> How do we get to consensus here? Options seem to be:\r\n> \r\n> 1. Stick with echconfig and current codepoint.  (Not preferable.)\r\n> 2. Switch to ech and use new codepoint.   (Burns a codepoint, not strictly necessary.)\r\n> 3. Switch to ech and keep existing codepoint.   (Changes the presentation to wire format mapping of an existing codepoint.)\r\n> \r\n> I could go with either 2/3. @marka63 seems to strongly prefer 2. @bemasc seems to strongly prefer 3.\r\n\r\n3 is good, 2 is fine but seems a bit officious, and 1 seems kind of bad but livable.\r\n\r\nSo, they're all ok.",
           "createdAt": "2021-03-16T04:04:42Z",
           "updatedAt": "2021-03-16T04:04:42Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Like @enygren, I'm fine with 3 or 2, but lean towards 3 given the state of this record and its users. ",
+          "createdAt": "2021-03-16T15:48:58Z",
+          "updatedAt": "2021-03-16T15:48:58Z"
+        },
+        {
+          "author": "MikeBishop",
+          "authorAssociation": "OWNER",
+          "body": "I prefer 3.  There's a certain appeal to just letting ECH register the codepoint in their doc, but that seems orthogonal to this question.",
+          "createdAt": "2021-03-16T20:09:17Z",
+          "updatedAt": "2021-03-16T20:09:17Z"
+        },
+        {
+          "author": "davidben",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yeah, moving the registration mostly relates if we're doing (2) + delay. If we do the delay thing, we may as well move the codepoint IMO.\r\n\r\nI also prefer (3), in which case I agree it's orthogonal and doesn't matter much.",
+          "createdAt": "2021-03-16T22:01:08Z",
+          "updatedAt": "2021-03-16T22:01:08Z"
         }
       ],
       "reviews": [
@@ -23755,20 +23796,109 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTk0MDA1NDIy",
       "title": "Using TargetName to a proxy should be a MUST",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/303",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "enygren",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "When using a proxy with a SVCB record, using TargetName is a \"MUST\" as otherwise a client\r\nmight attempt to use parameters from a SVCB record with the service name which \r\nwill not always work.",
       "createdAt": "2021-03-16T15:27:29Z",
-      "updatedAt": "2021-03-16T15:27:29Z",
+      "updatedAt": "2021-03-16T20:24:05Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "5a5a54676d99b1ee3dbd48de2a682b99fc6f6e1c",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "enygren-proxy-targetname-must",
-      "headRefOid": "8d2698df539ec3e385cbd15666d03964f4dc603c",
+      "headRefOid": "fec3559d73b2c2f992d5c9bdbf870f1681bcc1f2",
+      "closedAt": "2021-03-16T20:24:05Z",
+      "mergedAt": "2021-03-16T20:24:05Z",
+      "mergedBy": "bemasc",
+      "mergeCommit": {
+        "oid": "5b61912583c93a06215b980fa9b9e5aaa65f14a4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjEzNDAyNTAy",
+          "commit": {
+            "abbreviatedOid": "8d2698d"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-16T15:35:10Z",
+          "updatedAt": "2021-03-16T15:35:16Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\nusing a SVCB record, clients MUST provide the final TargetName and port to the\r\n```",
+              "createdAt": "2021-03-16T15:35:10Z",
+              "updatedAt": "2021-03-16T20:19:11Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 304,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTk0MjQ2ODQ2",
+      "title": "Add release notes for -04",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/304",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-03-16T21:24:11Z",
+      "updatedAt": "2021-03-16T22:51:26Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "5b61912583c93a06215b980fa9b9e5aaa65f14a4",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-release-notes",
+      "headRefOid": "4ffd05e79957234f601b1e8959459e0ed096f452",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjEzNzg4ODYz",
+          "commit": {
+            "abbreviatedOid": "4ffd05e"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-16T22:51:26Z",
+          "updatedAt": "2021-03-16T22:51:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 306,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTk0Nzc1NTY2",
+      "title": "Remove the name for \"invalid\"",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/306",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Requested in #305",
+      "createdAt": "2021-03-17T14:41:40Z",
+      "updatedAt": "2021-03-17T14:41:41Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "5b61912583c93a06215b980fa9b9e5aaa65f14a4",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-iana",
+      "headRefOid": "6533a4cc8270d58834d05bcb9e7ade11f71f4caf",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
