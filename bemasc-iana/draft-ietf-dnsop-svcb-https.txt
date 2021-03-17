@@ -1626,7 +1626,8 @@ Table of Contents
    *  Format Reference: pointer to specification text
 
    The characters in the registered Name MUST be lower-case alphanumeric
-   or "-" (Section 2.1) and it MUST NOT start with "key".
+   or "-" (Section 2.1).  The name MUST NOT start with "key" or
+   "invalid".
 
    Entries in this registry are subject to a First Come First Served
    registration policy ([RFC8126], Section 4.6).  The Format Reference
