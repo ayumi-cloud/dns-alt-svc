@@ -5,9 +5,9 @@
 DNSOP Working Group                                          B. Schwartz
 Internet-Draft                                                    Google
 Intended status: Standards Track                               M. Bishop
-Expires: 28 August 2021                                        E. Nygren
+Expires: 18 September 2021                                     E. Nygren
                                                      Akamai Technologies
-                                                        24 February 2021
+                                                           17 March 2021
 
 
  Service binding and parameter specification via the DNS (DNS SVCB and
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 August 2021.
+   This Internet-Draft will expire on 18 September 2021.
 
 Copyright Notice
 
@@ -98,52 +98,54 @@ Table of Contents
      6.2.  "port"
      6.3.  "echconfig"
      6.4.  "ipv4hint" and "ipv6hint"
-     6.5.  "mandatory"
-   7.  Using SVCB with HTTPS and HTTP
-     7.1.  Query names for HTTPS RRs
-     7.2.  Relationship to Alt-Svc
-       7.2.1.  ALPN usage
-       7.2.2.  Untrusted channel
-       7.2.3.  Cache lifetime
-       7.2.4.  Granularity
-     7.3.  Interaction with Alt-Svc
-     7.4.  Requiring Server Name Indication
-     7.5.  HTTP Strict Transport Security
-     7.6.  HTTP-based protocols
-   8.  SVCB/HTTPS RR parameter for ECH configuration
-     8.1.  Client behavior
-     8.2.  Deployment considerations
-   9.  Zone Structures
-     9.1.  Structuring zones for flexibility
-     9.2.  Structuring zones for performance
-     9.3.  Examples
-       9.3.1.  Protocol enhancements
-       9.3.2.  Apex aliasing
-       9.3.3.  Parameter binding
-       9.3.4.  Multi-CDN
-       9.3.5.  Non-HTTPS uses
-   10. Interaction with other standards
-   11. Security Considerations
-   12. IANA Considerations
-     12.1.  SVCB RRType
-     12.2.  HTTPS RRType
-     12.3.  New registry for Service Parameters
-       12.3.1.  Procedure
-       12.3.2.  Initial contents
-     12.4.  Registry updates
-   13. Acknowledgments and Related Proposals
-   14. References
-     14.1.  Normative References
-     14.2.  Informative References
+   7.  ServiceMode RR compatibility and mandatory keys
+   8.  Using SVCB with HTTPS and HTTP
+     8.1.  Query names for HTTPS RRs
+     8.2.  Relationship to Alt-Svc
+       8.2.1.  ALPN usage
+       8.2.2.  Untrusted channel
+       8.2.3.  Cache lifetime
+       8.2.4.  Granularity
+     8.3.  Interaction with Alt-Svc
+     8.4.  Requiring Server Name Indication
+     8.5.  HTTP Strict Transport Security
+     8.6.  HTTP-based protocols
+   9.  SVCB/HTTPS RR parameter for ECH configuration
+     9.1.  Client behavior
+     9.2.  Deployment considerations
+   10. Zone Structures
+     10.1.  Structuring zones for flexibility
+     10.2.  Structuring zones for performance
+     10.3.  Examples
+       10.3.1.  Protocol enhancements
+       10.3.2.  Apex aliasing
+       10.3.3.  Parameter binding
+       10.3.4.  Multi-CDN
+       10.3.5.  Non-HTTPS uses
+   11. Interaction with other standards
+   12. Security Considerations
+   13. Privacy Considerations
+   14. IANA Considerations
+     14.1.  SVCB RRType
+     14.2.  HTTPS RRType
+     14.3.  New registry for Service Parameters
+       14.3.1.  Procedure
+       14.3.2.  Initial contents
+     14.4.  Registry updates
+   15. Acknowledgments and Related Proposals
+   16. References
+     16.1.  Normative References
+     16.2.  Informative References
    Appendix A.  Decoding text in zone files
-     A.1.  Decoding a value-list
-   Appendix B.  Comparison with alternatives
-     B.1.  Differences from the SRV RR type
-     B.2.  Differences from the proposed HTTP record
-     B.3.  Differences from the proposed ANAME record
-     B.4.  Comparison with separate RR types for AliasMode and
+     A.1.  Decoding a comma-separated list
+   Appendix B.  HTTP Mapping Summary
+   Appendix C.  Comparison with alternatives
+     C.1.  Differences from the SRV RR type
+     C.2.  Differences from the proposed HTTP record
+     C.3.  Differences from the proposed ANAME record
+     C.4.  Comparison with separate RR types for AliasMode and
            ServiceMode
-   Appendix C.  Change history
+   Appendix D.  Change history
    Authors' Addresses
 
 1.  Introduction
@@ -177,14 +179,14 @@ Table of Contents
    resource record that can be applied directly and efficiently to a
    wide range of services (Section 2).  The HTTPS RR is then defined as
    a special case of SVCB that improves efficiency and convenience for
-   use with HTTPS (Section 7) by avoiding the need for an Attrleaf label
-   [Attrleaf] (Section 7.1).  Other protocols with similar needs may
+   use with HTTPS (Section 8) by avoiding the need for an Attrleaf label
+   [Attrleaf] (Section 8.1).  Other protocols with similar needs may
    follow the pattern of HTTPS and assign their own SVCB-compatible RR
    types.
 
    All behaviors described as applying to the SVCB RR also apply to the
-   HTTPS RR unless explicitly stated otherwise.  Section 7 describes
-   additional behaviors specific to the HTTPS RR.  Apart from Section 7
+   HTTPS RR unless explicitly stated otherwise.  Section 8 describes
+   additional behaviors specific to the HTTPS RR.  Apart from Section 8
    and introductory examples, much of this document refers only to the
    SVCB RR, but those references should be taken to apply to SVCB,
    HTTPS, and any future SVCB-compatible RR types.
@@ -232,7 +234,7 @@ Table of Contents
 
    *  Provide an HSTS-like indication [HSTS] signaling that the HTTPS
       scheme should be used instead of HTTP for this request (see
-      Section 7.5).
+      Section 8.5).
 
 1.2.  Overview of the SVCB RR
 
@@ -282,7 +284,7 @@ Table of Contents
 1.3.  Parameter for Encrypted ClientHello
 
    This document also defines a parameter for Encrypted ClientHello
-   [ECH] keys.  See Section 8.
+   [ECH] keys.  See Section 9.
 
 1.4.  Terminology
 
@@ -326,7 +328,7 @@ Table of Contents
 
    Other SVCB-compatible resource record types can also be defined as-
    needed.  In particular, the HTTPS RR (RR type 65) provides special
-   handling for the case of "https" origins as described in Section 7.
+   handling for the case of "https" origins as described in Section 8.
 
    SVCB RRs are extensible by a list of SvcParams, which are pairs
    consisting of a SvcParamKey and a SvcParamValue.  Each SvcParamKey
@@ -345,11 +347,11 @@ Table of Contents
    The SVCB record is defined specifically within the Internet ("IN")
    Class ([RFC1035]).
 
-   SvcPriority is a number in the range 0-65535, TargetName is a domain
-   name, and the SvcParams are a whitespace-separated list, with each
-   SvcParam consisting of a SvcParamKey=SvcParamValue pair or a
-   standalone SvcParamKey.  SvcParamKeys are subject to IANA control
-   (Section 12.3).
+   SvcPriority is a number in the range 0-65535, TargetName is a
+   "<domain-name>" ([RFC1035] Section 5.1), and the SvcParams are a
+   whitespace-separated list, with each SvcParam consisting of a
+   SvcParamKey=SvcParamValue pair or a standalone SvcParamKey.
+   SvcParamKeys are subject to IANA control (Section 14.3).
 
    Each SvcParamKey SHALL appear at most once in the SvcParams.  In
    presentation format, SvcParamKeys are lower-case alphanumeric
@@ -362,10 +364,10 @@ Table of Contents
    SvcParamValue = char-string
    value         = *OCTET
 
-   Unless otherwise specified, the SvcParamValue is parsed using the
-   character-string decoding algorithm (Appendix A), producing a
-   "value".  The "value" is then validated and converted into wire-
-   format in a manner specific to each key.
+   The SvcParamValue is parsed using the character-string decoding
+   algorithm (Appendix A), producing a "value".  The "value" is then
+   validated and converted into wire-format in a manner specific to each
+   key.
 
    When the "=" is omitted, the "value" is interpreted as empty.
 
@@ -375,9 +377,9 @@ Table of Contents
    above, and the decoded "value" SHALL be used as its wire format
    encoding.
 
-   For some SvcParamKeys, the SvcParamValue corresponds to a list or set
-   of items.  Presentation formats for such keys SHOULD make use of the
-   decoding algorithm in Appendix A.1, producing a "value-list".
+   For some SvcParamKeys, the "value" corresponds to a list or set of
+   items.  Presentation formats for such keys SHOULD use a comma-
+   separated list (Appendix A.1).
 
    SvcParams in presentation format MAY appear in any order, but keys
    MUST NOT be repeated.
@@ -400,7 +402,7 @@ Table of Contents
    series of SvcParamKey=SvcParamValue pairs, represented as:
 
    *  a 2 octet field containing the SvcParamKey as an integer in
-      network byte order.  (See Section 12.3.2 for the defined values.)
+      network byte order.  (See Section 14.3.2 for the defined values.)
 
    *  a 2 octet field containing the length of the SvcParamValue as an
       integer between 0 and 65535 in network byte order (but constrained
@@ -433,16 +435,16 @@ Table of Contents
    prefixed with an underscore, resulting in a domain name like
    "_examplescheme.api.example.com.".  This follows the Attrleaf naming
    pattern [Attrleaf], so the scheme MUST be registered appropriately
-   with IANA (see Section 10).
+   with IANA (see Section 11).
 
    Protocol mapping documents MAY specify additional underscore-prefixed
    labels to be prepended.  For schemes that specify a port
    (Section 3.2.3 of [URI]), one reasonable possibility is to prepend
-   the indicated port number (or the default if no port number is
-   specified).  We term this behavior "Port Prefix Naming", and use it
-   in the examples throughout this document.
+   the indicated port number if a non-default port number is specified.
+   We term this behavior "Port Prefix Naming", and use it in the
+   examples throughout this document.
 
-   See Section 7.1 for the HTTPS RR behavior.
+   See Section 8.1 for the HTTPS RR behavior.
 
    When a prior CNAME or SVCB record has aliased to a SVCB record, each
    RR shall be returned under its own owner name.
@@ -561,6 +563,13 @@ Table of Contents
    scheme.  Unless specified otherwise by the protocol mapping, clients
    MUST ignore any SvcParam that they do not recognize.
 
+   Some SvcParams impose requirements on other SvcParams in the RR.  A
+   ServiceMode RR is called "self-consistent" if its SvcParams all
+   comply with each others' requirements.  Zone-file implementations
+   SHOULD enforce self-consistency.  Clients MUST reject any RR whose
+   recognized SvcParams are not self-consistent, and MAY reject the
+   entire RRSet.
+
 2.5.  Special handling of "." in TargetName
 
    If TargetName has the value "." (represented in the wire format as a
@@ -589,53 +598,62 @@ Table of Contents
 
 3.  Client behavior
 
-   A SVCB-aware client selects an endpoint for a service using the
-   following procedure:
+   "SVCB resolution" is the process of enumerating the priority-ordered
+   endpoints for a service, as performed by the client.  SVCB resolution
+   is implemented as follows:
 
-   1.  Let $ADDR_QNAME be the service name.  Let $SVCB_QNAME be the
-       service name plus appropriate prefixes for the scheme (see
-       Section 2.3).
+   1.  Let $QNAME be the service name plus appropriate prefixes for the
+       scheme (see Section 2.3).
 
-   2.  In parallel, issue AAAA/A queries for $ADDR_QNAME and a SVCB
-       query for $SVCB_QNAME.  The answers for these may or may not
-       include CNAME pointers before reaching one or more of these
-       records.
+   2.  Issue a SVCB query for $QNAME.
 
-   3.  If an AliasMode SVCB record is returned for $SVCB_QNAME, clients
-       MUST set $ADDR_QNAME and $SVCB_QNAME to its TargetName (without
-       additional prefixes) and loop back to step 2, subject to chain
-       length limits and loop detection heuristics (see Section 3.1).
+   3.  If an AliasMode SVCB record is returned for $QNAME (after
+       following CNAMEs as normal), set $QNAME to its TargetName
+       (without additional prefixes) and loop back to step 2, subject to
+       chain length limits and loop detection heuristics (see
+       Section 3.1).
 
-   4.  If one or more ServiceMode records are returned for $SVCB_QNAME,
-       clients SHOULD select the highest-priority compatible record with
-       acceptable parameters.  This TargetName and SvcParams represent
-       the preferred endpoint.  If connection to this endpoint fails,
-       the client MAY try to connect using values from a lower-priority
-       record.  If all attempts fail, clients SHOULD go to step 5.
+   4.  If one or more "compatible" (Section 7) ServiceMode records are
+       returned, these represent the alternative endpoints.
 
-   5.  Try to use the endpoint consisting of $ADDR_QNAME, the authority
-       endpoint's port number, and no SvcParams.
-
-   6.  If all of the above connection attempts fail, clients MAY connect
-       to the authority endpoint.
+   5.  Otherwise, SVCB resolution has failed, and the list of known
+       endpoints is empty.
 
    This procedure does not rely on any recursive or authoritative DNS
    server to comply with this specification or have any awareness of
    SVCB.
 
-   When selecting between AAAA and A records to use, clients may use an
-   approach such as Happy Eyeballs [HappyEyeballsV2].
+   Once SVCB resolution has concluded, the client proceeds with
+   connection establishment.  Clients SHOULD try higher-priority
+   alternatives first, with fallback to lower-priority alternatives.
+   Clients issue AAAA and/or A queries for the selected TargetName, and
+   MAY choose between them using an approach such as Happy Eyeballs
+   [HappyEyeballsV2].
+
+   A client is called "SVCB-optional" if it can connect without the use
+   of ServiceMode records, and "SVCB-reliant" otherwise.  Clients for
+   pre-existing protocols (e.g.  HTTPS) SHALL implement SVCB-optional
+   behavior (except as noted in Section 3.1 and Section 9.1).
+
+   SVCB-optional clients SHOULD issue in parallel any other DNS queries
+   that might be needed for connection establishment.  SVCB-optional
+   clients SHALL append an alternative endpoint consisting of the final
+   value of $QNAME, the authority endpoint's port number, and no
+   SvcParams, to the list of alternative endpoints, which is attempted
+   before falling back to non-SVCB connection modes.  This ensures that
+   SVCB-optional clients will make use of an AliasMode record whose
+   TargetName has A and/or AAAA records but no SVCB records.
 
    Some important optimizations are discussed in Section 5 to avoid
    additional latency in comparison to ordinary AAAA/A lookups.
 
 3.1.  Handling resolution failures
 
-   If a SVCB query results in a SERVFAIL error, transport error, or
+   If SVCB resolution fails due to a SERVFAIL error, transport error, or
    timeout, and DNS exchanges between the client and the recursive
    resolver are cryptographically protected (e.g. using TLS [DoT] or
-   HTTPS [DoH]), the client SHOULD NOT fall back to $ADDR_QNAME or the
-   authority endpoint (steps 5 and 6 above).  Otherwise, an active
+   HTTPS [DoH]), a SVCB-optional client SHOULD abandon the connection
+   attempt like a SVCB-reliant client would.  Otherwise, an active
    attacker could mount a downgrade attack by denying the user access to
    the SvcParams.
 
@@ -647,8 +665,8 @@ Table of Contents
    responses, based on their size or other observable patterns.
 
    Similarly, if the client enforces DNSSEC validation on A/AAAA
-   responses, it SHOULD NOT fall back to steps 5 or 6 if the SVCB
-   response fails to validate.
+   responses, it SHOULD terminate the connection if a SVCB response
+   fails to validate.
 
    If the client is unable to complete SVCB resolution due to its chain
    length limit, the client SHOULD fall back to the authority endpoint,
@@ -662,16 +680,18 @@ Table of Contents
    A or AAAA queries for destination domains.  If the client is using
    named destinations with a proxy that does not provide SVCB query
    capability (e.g. through an affiliated DNS resolver), the client
-   would have to perform SVCB queries though a separate resolver.  This
-   might disclose the client's destinations to an additional party,
-   creating privacy concerns.  If these concerns apply, the client
-   SHOULD disable SVCB resolution.
+   would have to perform SVCB resolution separately, likely disclosing
+   the destinations to additional parties.  Clients that support such
+   proxies SHOULD arrange for a separate SVCB resolution procedure with
+   appropriate privacy properties, or disable SVCB resolution entirely
+   if SVCB-optional.
 
    If the client does use SVCB and named destinations, the client SHOULD
    follow the standard SVCB resolution process, selecting the smallest-
    SvcPriority option that is compatible with the client and the proxy.
-   The client SHOULD provide the final TargetName and port to the proxy,
-   which will perform any required A and AAAA lookups.
+   When connecting using a SVCB record, clients MUST provide the final
+   TargetName and port to the proxy, which will perform any required A
+   and AAAA lookups.
 
    Providing the proxy with the final TargetName has several benefits:
 
@@ -754,12 +774,20 @@ Table of Contents
 5.  Performance optimizations
 
    For optimal performance (i.e. minimum connection setup time), clients
-   SHOULD issue address (AAAA and/or A) and SVCB queries simultaneously,
-   and SHOULD implement a client-side DNS cache.  Responses in the
+   SHOULD implement a client-side DNS cache.  Responses in the
    Additional section of a SVCB response SHOULD be placed in cache
-   before performing any followup queries.  With these optimizations in
-   place, and conforming DNS servers, using SVCB does not add network
-   latency to connection setup.
+   before performing any followup queries.  With this behavior, and
+   conforming DNS servers, using SVCB does not add network latency to
+   connection setup.
+
+   To improve performance when using a non-conforming recursive
+   resolver, clients SHOULD issue speculative A and/or AAAA queries in
+   parallel with each SVCB query, based on a predicted value of
+   TargetName (see Section 10.2).
+
+   After a ServiceMode RRSet is received, clients MAY try more than one
+   option in parallel, and MAY prefetch A and AAAA records for multiple
+   TargetNames.
 
 5.1.  Optimistic pre-connection and connection reuse
 
@@ -772,7 +800,7 @@ Table of Contents
    SHOULD wait for 50 milliseconds before starting optimistic pre-
    connection, as per the guidance in [HappyEyeballsV2].
 
-   An SVCB record is consistent with a connection if the client would
+   A SVCB record is consistent with a connection if the client would
    attempt an equivalent connection when making use of that record.  If
    a SVCB record is consistent with an active or in-progress connection
    C, the client MAY prefer that record and use C as its connection.
@@ -790,8 +818,8 @@ Table of Contents
    has higher priority.
 
    If none of the SVCB records are consistent with any active or in-
-   progress connection, clients must proceed as described in Step 3 of
-   the procedure in Section 3.
+   progress connection, clients proceed with connection establishment as
+   described in Section 3.
 
 5.2.  Generating and using incomplete responses
 
@@ -814,7 +842,10 @@ Table of Contents
 6.  Initial SvcParamKeys
 
    A few initial SvcParamKeys are defined here.  These keys are useful
-   for HTTPS, and most are applicable to other protocols as well.
+   for HTTPS, and most are applicable to other protocols as well.  Each
+   new protocol mapping document MUST specify which keys are applicable
+   and safe to use.  Protocol mappings MAY alter the interpretation of
+   SvcParamKeys but MUST NOT alter their presentation or wire formats.
 
 6.1.  "alpn" and "no-default-alpn"
 
@@ -835,10 +866,8 @@ Table of Contents
 
    alpn-id = 1*255OCTET
 
-   "alpn" is a multi-valued SvcParamKey.  To construct its value-list,
-   apply the value-list decoding algorithm (Appendix A.1) to the
-   SvcParamValue.  Each decoded value in the "alpn" value-list SHALL be
-   an "alpn-id".  The value-list MUST NOT be empty.
+   The presentation "value" SHALL be a comma-separated list
+   (Appendix A.1) of one or more "alpn-id"s.
 
    The wire format value for "alpn" consists of at least one "alpn-id"
    prefixed by its length as a single octet, and these length-value
@@ -847,7 +876,9 @@ Table of Contents
    malformed.
 
    For "no-default-alpn", the presentation and wire format values MUST
-   be empty.
+   be empty.  When "no-default-alpn" is specified in an RR, "alpn" must
+   also be specified in order for the RR to be "self-consistent"
+   (Section 2.4.3).
 
    Each scheme that uses this SvcParamKey defines a "default set" of
    supported ALPNs, which SHOULD NOT be empty.  To determine the set of
@@ -925,7 +956,7 @@ Table of Contents
 6.3.  "echconfig"
 
    The SvcParamKey to enable Encrypted ClientHello (ECH) is "echconfig".
-   Its value is defined in Section 8.  It is applicable to most TLS-
+   Its value is defined in Section 9.  It is applicable to most TLS-
    based protocols.
 
    When publishing a record containing an "echconfig" parameter, the
@@ -954,11 +985,10 @@ Table of Contents
    and/or AAAA response addresses could negatively impact load balancing
    or other geo-aware features and thereby degrade client performance.
 
-   To construct the value-list, apply the value-list decoding algorithm
-   (Appendix A.1) to the SvcParamValue.  Each decoded value in the
-   value-list SHALL be an IP address of the appropriate family in
-   standard textual format [RFC5952].  To enable simpler parsing, this
-   SvcParamValue MUST NOT contain escape sequences.
+   The presentation "value" SHALL be a comma-separated list
+   (Appendix A.1) of one or more IP addresses of the appropriate family
+   in standard textual format [RFC5952].  To enable simpler parsing,
+   this SvcParamValue MUST NOT contain escape sequences.
 
    The wire format for each parameter is a sequence of IP addresses in
    network byte order.  Like an A or AAAA RRSet, the list of addresses
@@ -982,7 +1012,7 @@ Table of Contents
    server operators SHOULD NOT include these hints, because they are
    unlikely to convey any performance benefit.
 
-6.5.  "mandatory"
+7.  ServiceMode RR compatibility and mandatory keys
 
    In a ServiceMode RR, a SvcParamKey is considered "mandatory" if the
    RR will not function correctly for clients that ignore this
@@ -993,19 +1023,20 @@ Table of Contents
    mandatory keys that are present.
 
    A ServiceMode RR is considered "compatible" with a client if the
-   client implements support for all its mandatory keys.  If the SVCB
+   client recognizes all the mandatory keys, and their values indicate
+   that successful connection establishment is possible.  If the SVCB
    RRSet contains no compatible RRs, the client will generally act as if
    the RRSet is empty.
 
-   In presentation format, "mandatory" contains a list of one or more
-   valid SvcParamKeys, either by their registered name or in the
-   unknown-key format (Section 2.1).  Keys MAY appear in any order, but
-   MUST NOT appear more than once.  Any listed keys MUST also appear in
-   the SvcParams.
+   The presentation "value" SHALL be a comma-separated list
+   (Appendix A.1) of one or more valid SvcParamKeys, either by their
+   registered name or in the unknown-key format (Section 2.1).  Keys MAY
+   appear in any order, but MUST NOT appear more than once.  For self-
+   consistency (Section 2.4.3), listed keys MUST also appear in the
+   SvcParams.
 
-   To construct the value-list, apply the value-list decoding algorithm
-   (Appendix A.1) to the SvcParamValue.  To enable simpler parsing, this
-   SvcParamValue MUST NOT contain escape sequences.
+   To enable simpler parsing, this SvcParamValue MUST NOT contain escape
+   sequences.
 
    For example, the following is a valid list of SvcParams:
 
@@ -1019,7 +1050,7 @@ Table of Contents
    SHOULD NOT appear in the list either.  (Including them wastes space
    and otherwise has no effect.)
 
-7.  Using SVCB with HTTPS and HTTP
+8.  Using SVCB with HTTPS and HTTP
 
    Use of any protocol with SVCB requires a protocol-specific mapping
    specification.  This section specifies the mapping for HTTPS and
@@ -1042,11 +1073,15 @@ Table of Contents
 
    All the SvcParamKeys defined in Section 6 are permitted for use in
    HTTPS RRs.  The default set of ALPN IDs is the single value
-   "http/1.1".  The "automatically mandatory" keys (Section 6.5) are
-   "port", "alpn", and "no-default-alpn".
+   "http/1.1".  The "automatically mandatory" keys (Section 7) are
+   "port" and "no-default-alpn".  (As described in Section 7, clients
+   must either implement these keys or ignore any RR in which they
+   appear.)  Clients that restrict the HTTPS destination port (e.g.
+   using the "bad ports" list from [FETCH]) SHOULD apply the same
+   restriction to the "port" SvcParam.
 
    The presence of an HTTPS RR for an origin also indicates that all
-   HTTP resources are available over HTTPS, as discussed in Section 7.5.
+   HTTP resources are available over HTTPS, as discussed in Section 8.5.
    This allows HTTPS RRs to apply to pre-existing "http" scheme URLs,
    while ensuring that the client uses a secure and authenticated HTTPS
    connection.
@@ -1055,7 +1090,7 @@ Table of Contents
    Alternative Services proposed standard [AltSvc].  Clients and servers
    that implement HTTPS RRs are not required to implement Alt-Svc.
 
-7.1.  Query names for HTTPS RRs
+8.1.  Query names for HTTPS RRs
 
    The HTTPS RR uses Port Prefix Naming (Section 2.3), with one
    modification: if the scheme is "https" and the port is 443, then the
@@ -1073,14 +1108,14 @@ Table of Contents
    SVCB.
 
    Clients always convert "http" URLs to "https" before performing an
-   HTTPS RR query using the process described in Section 7.5, so domain
+   HTTPS RR query using the process described in Section 8.5, so domain
    owners MUST NOT publish HTTPS RRs with a prefix of "_http".
 
    Note that none of these forms alter the HTTPS origin or authority.
    For example, clients MUST continue to validate TLS certificate
    hostnames based on the origin.
 
-7.2.  Relationship to Alt-Svc
+8.2.  Relationship to Alt-Svc
 
    Publishing a ServiceMode HTTPS RR in DNS is intended to be similar to
    transmitting an Alt-Svc field value over HTTPS, and receiving an
@@ -1088,13 +1123,13 @@ Table of Contents
    HTTPS.  However, there are some differences in the intended client
    and server behavior.
 
-7.2.1.  ALPN usage
+8.2.1.  ALPN usage
 
    Unlike Alt-Svc Field Values, HTTPS RRs can contain multiple ALPN IDs,
    and clients are encouraged to offer additional ALPNs that they
-   support (subject to security constraints).
+   support.
 
-7.2.2.  Untrusted channel
+8.2.2.  Untrusted channel
 
    SVCB does not require or provide any assurance of authenticity.
    (DNSSEC signing and verification, which would provide such assurance,
@@ -1108,7 +1143,7 @@ Table of Contents
    because this parameter is not safe to accept over an untrusted
    channel.
 
-7.2.3.  Cache lifetime
+8.2.3.  Cache lifetime
 
    There is no SvcParamKey corresponding to the Alt-Svc "ma" (max age)
    parameter.  Instead, server operators encode the expiration time in
@@ -1125,7 +1160,7 @@ Table of Contents
    compatibility with expired records until they observe that nearly all
    connections have migrated to the new configuration.
 
-7.2.4.  Granularity
+8.2.4.  Granularity
 
    Sending Alt-Svc over HTTP allows the server to tailor the Alt-Svc
    Field Value specifically to the client.  When using an HTTPS RR,
@@ -1133,20 +1168,21 @@ Table of Contents
    Therefore, HTTPS RRs are not suitable for uses that require single-
    client granularity.
 
-7.3.  Interaction with Alt-Svc
+8.3.  Interaction with Alt-Svc
 
    Clients that do not implement support for Encrypted ClientHello MAY
    skip the HTTPS RR query if a usable Alt-Svc value is available in the
    local cache.  If Alt-Svc connection fails, these clients SHOULD fall
    back to the HTTPS RR client connection procedure (Section 3).
 
-   For clients that implement support for ECH, the interaction between
-   HTTPS RRs and Alt-Svc is described in Section 8.1.
+   Clients that implement support for ECH MUST perform the HTTPS RR
+   query first, and MUST only make use of Alt-Svc when operating in
+   SVCB-optional mode (see Section 9.1).
 
-   This specification does not alter the DNS queries performed when
+   This specification does not alter the DNS records used when
    connecting to an Alt-Svc hostname (typically A and/or AAAA only).
 
-7.4.  Requiring Server Name Indication
+8.4.  Requiring Server Name Indication
 
    Clients MUST NOT use an HTTPS RR response unless the client supports
    TLS Server Name Indication (SNI) and indicate the origin name when
@@ -1155,7 +1191,7 @@ Table of Contents
    Note that the TLS SNI (and also the HTTP "Host" or ":authority") will
    indicate the origin, not the TargetName.
 
-7.5.  HTTP Strict Transport Security
+8.5.  HTTP Strict Transport Security
 
    By publishing a usable HTTPS RR, the server operator indicates that
    all useful HTTP resources on that origin are reachable over HTTPS,
@@ -1175,7 +1211,7 @@ Table of Contents
    This construction is equivalent to Section 8.3 of [HSTS], point 5.
 
    If an HTTPS RR query for this "https" URL returns any AliasMode HTTPS
-   RRs, or any compatible ServiceMode HTTPS RRs (see Section 6.5), the
+   RRs, or any compatible ServiceMode HTTPS RRs (see Section 7), the
    client SHOULD act as if it has received an HTTP "307 Temporary
    Redirect" redirect to this "https" URL.  (Receipt of an incompatible
    ServiceMode RR does not trigger the redirect behavior.)  Because
@@ -1183,13 +1219,17 @@ Table of Contents
    MUST NOT place any more trust in this signal than if they had
    received a 307 redirect over cleartext HTTP.
 
-   When making an "https" scheme request to an origin with an HTTPS RR,
-   either directly or via the above redirect, the client SHOULD
-   terminate the connection if there are any errors with the underlying
-   secure transport, such as errors in certificate validation.  This
-   aligns with Section 8.4 and Section 12.1 of [HSTS].
+   When an HTTPS connection fails due to an error in the underlying
+   secure transport, such as an error in certificate validation, some
+   clients currently offer a "user recourse" that allows the user to
+   bypass the security error and connect anyway.  When making an "https"
+   scheme request to an origin with an HTTPS RR, either directly or via
+   the above redirect, such a client MAY remove the user recourse
+   option.  Origins that publish HTTPS RRs therefore MUST NOT rely on
+   user recourse for access.  For more information, see Section 8.4 and
+   Section 12.1 of [HSTS].
 
-7.6.  HTTP-based protocols
+8.6.  HTTP-based protocols
 
    All protocols employing "http://" or "https://" URLs SHOULD respect
    HTTPS RRs.  For example, clients that support HTTPS RRs and implement
@@ -1200,13 +1240,13 @@ Table of Contents
    An HTTP-based protocol MAY define its own SVCB mapping.  Such
    mappings MAY be defined to take precedence over HTTPS RRs.
 
-8.  SVCB/HTTPS RR parameter for ECH configuration
+9.  SVCB/HTTPS RR parameter for ECH configuration
 
    The SVCB "echconfig" parameter is defined for conveying the ECH
    configuration of an alternative endpoint.  In wire format, the value
-   of the parameter is an ECHConfigs vector [ECH], including the
-   redundant length prefix.  In presentation format, the value is a
-   single ECHConfigs encoded in Base64 [base64].  Base64 is used here to
+   of the parameter is an ECHConfigList [ECH], including the redundant
+   length prefix.  In presentation format, the value is a single
+   ECHConfigList encoded in Base64 [base64].  Base64 is used here to
    simplify integration with TLS server software.  To enable simpler
    parsing, this SvcParam MUST NOT contain escape sequences.
 
@@ -1221,32 +1261,20 @@ Table of Contents
    ClientHello whose Server Name Indication identifies the desired
    service.
 
-8.1.  Client behavior
+9.1.  Client behavior
 
-   The general client behavior specified in Section 3 permits clients to
-   retry connection with a less preferred alternative if the preferred
-   option fails, including falling back to a direct connection if all
-   SVCB options fail.  This behavior is not suitable for ECH, because
-   fallback would negate the privacy benefits of ECH.  Accordingly, ECH-
-   capable clients SHALL implement the following behavior for connection
-   establishment:
+   The SVCB-optional client behavior specified in Section 3 permits
+   clients to fall back to a direct connection if all SVCB options fail.
+   This behavior is not suitable for ECH, because fallback would negate
+   the privacy benefits of ECH.  Accordingly, ECH-capable SVCB-optional
+   clients MUST switch to SVCB-reliant connection establishment if SVCB
+   resolution succeeded (following Section 3) and all alternative
+   endpoints have an "echconfig" key.
 
-   1.  Perform connection establishment using HTTPS RRs as described in
-       Section 3, but do not fall back to address records (steps 5 and
-       6).  If there are compatible HTTPS RRs, they all have an
-       "echconfig" key, and attempts to connect to them all fail,
-       terminate connection establishment.
+   As a latency optimization, clients MAY prefetch DNS records that will
+   only be used in SVCB-optional mode.
 
-   2.  If the client implements Alt-Svc, try to connect using any
-       entries from the Alt-Svc cache.
-
-   3.  Fall back to address records (steps 5 and 6 of Section 3) if
-       necessary.
-
-   As a latency optimization, clients MAY prefetch DNS records for later
-   steps before they are needed.
-
-8.2.  Deployment considerations
+9.2.  Deployment considerations
 
    An HTTPS RRSet containing some RRs with "echconfig" and some without
    is vulnerable to a downgrade attack.  This configuration is NOT
@@ -1255,9 +1283,9 @@ Table of Contents
    SvcPriority) than those without, in order to maximize the likelihood
    that ECH will be used in the absence of an active adversary.
 
-9.  Zone Structures
+10.  Zone Structures
 
-9.1.  Structuring zones for flexibility
+10.1.  Structuring zones for flexibility
 
    Each ServiceForm RRSet can only serve a single scheme.  The scheme is
    indicated by the owner name and the RR type.  For the generic SVCB RR
@@ -1272,13 +1300,16 @@ Table of Contents
    "foosvc.example.net" for "foo://" schemes).  This will help to avoid
    confusion when another scheme needs to be added to the configuration.
 
-9.2.  Structuring zones for performance
+10.2.  Structuring zones for performance
 
    To avoid a delay for clients using a nonconforming recursive
    resolver, domain owners SHOULD minimize the use of AliasMode records,
-   and choose TargetName to be a domain for which the client will have
-   already issued address queries (see Section 3).  For
-   foo://foo.example.com:8080, this might look like:
+   and SHOULD choose TargetName according to a predictable convention
+   that is known to the client, so that clients can issue A and/or AAAA
+   queries for TargetName in advance (see Section 5).  Unless otherwise
+   specified, the convention is to set TargetName to the service name
+   for an initial ServiceMode record, or to "." if it is reached via an
+   alias.  For foo://foo.example.com:8080, this might look like:
 
    $ORIGIN example.com. ; Origin
    foo                  3600 IN CNAME foosvc.example.net.
@@ -1290,10 +1321,12 @@ Table of Contents
 
    Domain owners SHOULD avoid using a TargetName that is below a DNAME,
    as this is likely unnecessary and makes responses slower and larger.
+   Also, zone structures that require following more than 8 aliases
+   (counting both AliasMode and CNAME records) are NOT RECOMMENDED.
 
-9.3.  Examples
+10.3.  Examples
 
-9.3.1.  Protocol enhancements
+10.3.1.  Protocol enhancements
 
    Consider a simple zone of the form:
 
@@ -1310,7 +1343,7 @@ Table of Contents
    also include other information (e.g. non-standard port, ECH
    configuration).
 
-9.3.2.  Apex aliasing
+10.3.2.  Apex aliasing
 
    Consider a zone that is using CNAME aliasing:
 
@@ -1336,7 +1369,7 @@ Table of Contents
    as "https://www.aliased.example" and "https://aliased.example",
    respectively, and will validate TLS server certificates accordingly.
 
-9.3.3.  Parameter binding
+10.3.3.  Parameter binding
 
    Suppose that svc.example's default server pool supports HTTP/2, and
    it has deployed HTTP/3 on a new server pool with a different
@@ -1357,7 +1390,7 @@ Table of Contents
    each server pool, so each server pool can have its own protocol, ECH
    configuration, etc.
 
-9.3.4.  Multi-CDN
+10.3.4.  Multi-CDN
 
    The HTTPS RR is intended to support HTTPS services operated by
    multiple independent entities, such as different Content Delivery
@@ -1455,7 +1488,7 @@ Table of Contents
       from a different CDN which does support ECH.  Clients will be
       unable to use ECH in this case.
 
-9.3.5.  Non-HTTPS uses
+10.3.5.  Non-HTTPS uses
 
    For services other than HTTPS, the SVCB RR and an Attrleaf label
    [Attrleaf] will be used.  For example, to reach an example resource
@@ -1468,7 +1501,7 @@ Table of Contents
    HTTPS RRs use similar Attrleaf labels if the origin contains a non-
    default port.
 
-10.  Interaction with other standards
+11.  Interaction with other standards
 
    This standard is intended to reduce connection latency and improve
    user privacy.  Server operators implementing this standard SHOULD
@@ -1488,7 +1521,7 @@ Table of Contents
    entry in the IANA URI Schemes Registry [RFC7595].  The scheme SHOULD
    have a defined specification for use with SVCB.
 
-11.  Security Considerations
+12.  Security Considerations
 
    SVCB/HTTPS RRs are intended for distribution over untrusted channels,
    and clients are REQUIRED to verify that the alternative endpoint is
@@ -1508,8 +1541,8 @@ Table of Contents
    often prevent resolution as well, even when the client and recursive
    resolver validate DNSSEC and use a secure transport.  These downgrade
    attacks can prevent the HTTPS upgrade provided by the HTTPS RR
-   (Section 7.5), and disable the encryption enabled by the echconfig
-   SvcParamKey (Section 8).  To prevent downgrades, Section 3.1
+   (Section 8.5), and disable the encryption enabled by the echconfig
+   SvcParamKey (Section 9).  To prevent downgrades, Section 3.1
    recommends that clients abandon the connection attempt when such an
    attack is detected.
 
@@ -1520,9 +1553,30 @@ Table of Contents
    particular protocols or ports within a domain.  Clients that might be
    subject to such attacks SHOULD ignore AliasForm "." records.
 
-12.  IANA Considerations
+   A hostile DNS intermediary or origin can return SVCB records
+   indicating any IP address and port number, including IP addresses
+   inside the local network and port numbers assigned to internal
+   services.  If the attacker can influence the client's payload (e.g.
+   TLS session ticket contents), and an internal service has a
+   sufficiently lax parser, it's possible that the attacker could gain
+   unintended access.  (The same concerns apply to SRV records, HTTP
+   Alt-Svc, and HTTP redirects.)  As a mitigation, SVCB mapping
+   documents SHOULD indicate any port number restrictions that are
+   appropriate for the supported transports.
 
-12.1.  SVCB RRType
+13.  Privacy Considerations
+
+   Standard address queries reveal the user's intent to access a
+   particular domain.  This information is visible to the recursive
+   resolver, and to many other parties when plaintext DNS transport is
+   used.  SVCB queries, like queries for SRV records and other specific
+   RR types, additionally reveal the user's intent to use a particular
+   protocol.  This is not normally sensitive information, but it should
+   be considered when adding SVCB support in a new context.
+
+14.  IANA Considerations
+
+14.1.  SVCB RRType
 
    This document defines a new DNS RR type, SVCB, whose value 64 has
    been allocated by IANA from the "Resource Record (RR) TYPEs"
@@ -1536,7 +1590,7 @@ Table of Contents
 
    Reference: This document
 
-12.2.  HTTPS RRType
+14.2.  HTTPS RRType
 
    This document defines a new DNS RR type, HTTPS, whose value 65 has
    been allocated by IANA from the "Resource Record (RR) TYPEs"
@@ -1550,7 +1604,7 @@ Table of Contents
 
    Reference: This document
 
-12.3.  New registry for Service Parameters
+14.3.  New registry for Service Parameters
 
    The "Service Binding (SVCB) Parameter Registry" defines the namespace
    for parameters, including string representations and numeric
@@ -1559,7 +1613,7 @@ Table of Contents
 
    ACTION: create and include a reference to this registry.
 
-12.3.1.  Procedure
+14.3.1.  Procedure
 
    A registration MUST include the following fields:
 
@@ -1584,7 +1638,7 @@ Table of Contents
    This arrangement supports the development of new parameters while
    ensuring that zone files can be made interoperable.
 
-12.3.2.  Initial contents
+14.3.2.  Initial contents
 
    The "Service Binding (SVCB) Parameter Registry" shall initially be
    populated with the registrations below:
@@ -1594,7 +1648,7 @@ Table of Contents
    |             |                 |                | Reference       |
    +=============+=================+================+=================+
    | 0           | mandatory       | Mandatory keys | (This document) |
-   |             |                 | in this RR     | Section 6.5     |
+   |             |                 | in this RR     | Section 7       |
    +-------------+-----------------+----------------+-----------------+
    | 1           | alpn            | Additional     | (This document) |
    |             |                 | supported      | Section 6.1     |
@@ -1620,14 +1674,14 @@ Table of Contents
    +-------------+-----------------+----------------+-----------------+
    | 65280-65534 | N/A             | Private Use    | (This document) |
    +-------------+-----------------+----------------+-----------------+
-   | 65535       | invalid         | Reserved       | (This document) |
+   | 65535       | N/A             | Reserved       | (This document) |
    |             |                 | ("Invalid      |                 |
    |             |                 | key")          |                 |
    +-------------+-----------------+----------------+-----------------+
 
                                  Table 1
 
-12.4.  Registry updates
+14.4.  Registry updates
 
    Per [RFC6895], please add the following entries to the data type
    range of the Resource Record (RR) TYPEs registry:
@@ -1654,7 +1708,7 @@ Table of Contents
 
                                  Table 3
 
-13.  Acknowledgments and Related Proposals
+15.  Acknowledgments and Related Proposals
 
    There have been a wide range of proposed solutions over the years to
    the "CNAME at the Zone Apex" challenge proposed.  These include
@@ -1662,12 +1716,13 @@ Table of Contents
 
    Thank you to Ian Swett, Ralf Weber, Jon Reed, Martin Thomson, Lucas
    Pardue, Ilari Liusvaara, Tim Wicinski, Tommy Pauly, Chris Wood, David
-   Benjamin, and others for their feedback and suggestions on this
-   draft.
+   Benjamin, Mark Andrews, Emily Stark, Eric Orth, Kyle Rose, Craig
+   Taylor, Dan McArdle, Brian Dickson, and others for their feedback and
+   suggestions on this draft.
 
-14.  References
+16.  References
 
-14.1.  Normative References
+16.1.  Normative References
 
    [ALPN]     Friedl, S., Popov, A., Langley, A., and E. Stephan,
               "Transport Layer Security (TLS) Application-Layer Protocol
@@ -1699,9 +1754,9 @@ Table of Contents
 
    [ECH]      Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
               Encrypted Client Hello", Work in Progress, Internet-Draft,
-              draft-ietf-tls-esni-09, 16 December 2020,
+              draft-ietf-tls-esni-10, 8 March 2021,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              esni-09.txt>.
+              esni-10.txt>.
 
    [HappyEyeballsV2]
               Schinazi, D. and T. Pauly, "Happy Eyeballs Version 2:
@@ -1797,7 +1852,7 @@ Table of Contents
               RFC 6455, DOI 10.17487/RFC6455, December 2011,
               <https://datatracker.ietf.org/doc/html/rfc6455>.
 
-14.2.  Informative References
+16.2.  Informative References
 
    [AltSvc]   Nottingham, M., McManus, P., and J. Reschke, "HTTP
               Alternative Services", RFC 7838, DOI 10.17487/RFC7838,
@@ -1871,36 +1926,71 @@ Appendix A.  Decoding text in zone files
    "<character-string>" in RFC 1035, although the output length in this
    document is not limited to 255 octets.
 
-A.1.  Decoding a value-list
+A.1.  Decoding a comma-separated list
 
-   In order to represent lists of values in zone files, this
-   specification uses an extended version of character-string decoding
-   that adds the use of "," as a delimiter after double-quote
-   processing.  When "," is not escaped (by a preceding "\" or as the
-   escape sequence "\044"), it separates values in the output, which is
-   a list of 1*OCTET.  (For simplicity, empty values are not allowed.)
-   We refer to this modified procedure as "value-list decoding".
+   In order to represent lists of items in zone files, this
+   specification uses comma-separated lists.  When "," is not escaped
+   (by a preceding "\"), it separates items in the list.  (For
+   simplicity, empty items are not allowed.)
 
-   value-list = char-string
-   list-value = 1*OCTET
+   item            = 1*OCTET
+   ; item-allowed is OCTET minus "," and "\".
+   item-allowed    = %x00-2B / %x2D-5B / %x5D-FF
+   escaped-item    = 1*(item-allowed / "\," / "\\")
+   comma-separated = [escaped-item *("," escaped-item)]
 
-   For example, consider these "char-string" SvcParamValues:
+   Decoding of value-lists happens after character-string decoding.  For
+   example, consider these "char-string" SvcParamValues:
 
-   "part1,part2\,part3"
-   part1,part2\044part3
+   "part1,part2,part3\\,part4\\\\"
+   part1\,\p\a\r\t2\044part3\092,part4\092\\
 
-   Character-string decoding either of these inputs would produce a
-   single "*OCTET" output:
+   These inputs are equivalent: character-string decoding either of them
+   would produce the same "value":
 
-   part1,part2,part3
+   part1,part2,part3\,part4\\
 
-   Value-list decoding either of these inputs would instead convert it
-   to a list of two "list-value"s:
+   Applying comma-separated list decoding to this "value" would produce
+   a list of three "item"s:
 
    part1
-   part2,part3
+   part2
+   part3,part4\
 
-Appendix B.  Comparison with alternatives
+Appendix B.  HTTP Mapping Summary
+
+   This table serves as a non-normative summary of the HTTP mapping for
+   SVCB (Section 8).  Future protocol mappings may provide a similar
+   summary table.
+
+            +==========================+======================+
+            +==========================+======================+
+            | *Mapped scheme*          | "https"              |
+            +--------------------------+----------------------+
+            | *Other affected schemes* | "http", "wss", "ws", |
+            |                          | (other HTTP-based)   |
+            +--------------------------+----------------------+
+            | *RR type*                | HTTPS (65)           |
+            +--------------------------+----------------------+
+            | *Name prefix*            | None for port 443,   |
+            |                          | else "_$PORT._https" |
+            +--------------------------+----------------------+
+            | *Automatically Mandatory | "port", "no-default- |
+            | Keys*                    | alpn"                |
+            +--------------------------+----------------------+
+            | *SvcParam defaults*      | "alpn": ["http/1.1"] |
+            +--------------------------+----------------------+
+            | *Special behaviors*      | HTTP to HTTPS        |
+            |                          | upgrade              |
+            +--------------------------+----------------------+
+
+                                  Table 4
+
+   This table does not indicate any SvcParamKeys that servers are
+   required to publish, or that clients are required to implement,
+   because there are none in this mapping.
+
+Appendix C.  Comparison with alternatives
 
    The SVCB and HTTPS RR types closely resemble, and are inspired by,
    some existing record types and proposals.  A complaint with all of
@@ -1909,7 +1999,7 @@ Appendix B.  Comparison with alternatives
    solution that solves multiple problems we will overcome the inertia
    and have a path to achieve client implementation.
 
-B.1.  Differences from the SRV RR type
+C.1.  Differences from the SRV RR type
 
    An SRV record [SRV] can perform a similar function to the SVCB
    record, informing a client to look in a different location for a
@@ -1928,7 +2018,7 @@ B.1.  Differences from the SRV RR type
    *  SVCB records use 16 bit for SvcPriority for consistency with SRV
       and other RR types that also use 16 bit priorities.
 
-B.2.  Differences from the proposed HTTP record
+C.2.  Differences from the proposed HTTP record
 
    Unlike [I-D.bellis-dnsop-http-record], this approach is extensible to
    cover Alt-Svc and Encrypted ClientHello use-cases.  Like that
@@ -1937,7 +2027,7 @@ B.2.  Differences from the proposed HTTP record
    Like that proposal, it remains necessary to continue to include
    address records at the zone apex for legacy clients.
 
-B.3.  Differences from the proposed ANAME record
+C.3.  Differences from the proposed ANAME record
 
    Unlike [I-D.ietf-dnsop-aname], this approach is extensible to cover
    Alt-Svc and ECH use-cases.  This approach also does not require any
@@ -1957,7 +2047,7 @@ B.3.  Differences from the proposed ANAME record
    endpoint, and may remove the apex's address records if the observed
    legacy traffic has fallen to negligible levels.
 
-B.4.  Comparison with separate RR types for AliasMode and ServiceMode
+C.4.  Comparison with separate RR types for AliasMode and ServiceMode
 
    Abstractly, functions of AliasMode and ServiceMode are independent,
    so it might be tempting to specify them as separate RR types.
@@ -1972,7 +2062,35 @@ B.4.  Comparison with separate RR types for AliasMode and ServiceMode
    on clients and servers, and would not reduce implementation
    complexity.
 
-Appendix C.  Change history
+Appendix D.  Change history
+
+   *  draft-ietf-dnsop-svcb-https-03
+
+      -  Simplified escaping of comma-separated values
+
+      -  Reorganized client requirements
+
+      -  Added a warning about port filtering for cross-protocol attacks
+
+      -  Clarified self-consistency rules for SvcParams
+
+      -  Added a non-normative mapping summary table for HTTPS
+
+   *  draft-ietf-dnsop-svcb-https-02
+
+      -  Added a Privacy Considerations section
+
+      -  Adjusted resolution fallback description
+
+      -  Clarified status of SvcParams in AliasMode
+
+      -  Improved advice on zone structuring and use with Alt-Svc
+
+      -  Improved examples, including a new Multi-CDN example
+
+      -  Reorganized text on value-list parsing and SvcPriority
+
+      -  Improved phrasing and other editorial improvements throughout
 
    *  draft-ietf-dnsop-svcb-https-01
 
