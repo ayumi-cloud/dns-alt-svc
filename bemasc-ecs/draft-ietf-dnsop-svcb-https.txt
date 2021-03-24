@@ -5,9 +5,9 @@
 DNSOP Working Group                                          B. Schwartz
 Internet-Draft                                                    Google
 Intended status: Standards Track                               M. Bishop
-Expires: 22 August 2021                                        E. Nygren
+Expires: 25 September 2021                                     E. Nygren
                                                      Akamai Technologies
-                                                        18 February 2021
+                                                           24 March 2021
 
 
  Service binding and parameter specification via the DNS (DNS SVCB and
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 August 2021.
+   This Internet-Draft will expire on 25 September 2021.
 
 Copyright Notice
 
@@ -90,6 +90,7 @@ Table of Contents
      4.1.  Authoritative servers
      4.2.  Recursive resolvers
      4.3.  General requirements
+     4.4.  EDNS Client Subnet (ECS)
    5.  Performance optimizations
      5.1.  Optimistic pre-connection and connection reuse
      5.2.  Generating and using incomplete responses
@@ -347,11 +348,11 @@ Table of Contents
    The SVCB record is defined specifically within the Internet ("IN")
    Class ([RFC1035]).
 
-   SvcPriority is a number in the range 0-65535, TargetName is a domain
-   name, and the SvcParams are a whitespace-separated list, with each
-   SvcParam consisting of a SvcParamKey=SvcParamValue pair or a
-   standalone SvcParamKey.  SvcParamKeys are subject to IANA control
-   (Section 14.3).
+   SvcPriority is a number in the range 0-65535, TargetName is a
+   "<domain-name>" ([RFC1035] Section 5.1), and the SvcParams are a
+   whitespace-separated list, with each SvcParam consisting of a
+   SvcParamKey=SvcParamValue pair or a standalone SvcParamKey.
+   SvcParamKeys are subject to IANA control (Section 14.3).
 
    Each SvcParamKey SHALL appear at most once in the SvcParams.  In
    presentation format, SvcParamKeys are lower-case alphanumeric
@@ -440,9 +441,9 @@ Table of Contents
    Protocol mapping documents MAY specify additional underscore-prefixed
    labels to be prepended.  For schemes that specify a port
    (Section 3.2.3 of [URI]), one reasonable possibility is to prepend
-   the indicated port number (or the default if no port number is
-   specified).  We term this behavior "Port Prefix Naming", and use it
-   in the examples throughout this document.
+   the indicated port number if a non-default port number is specified.
+   We term this behavior "Port Prefix Naming", and use it in the
+   examples throughout this document.
 
    See Section 8.1 for the HTTPS RR behavior.
 
@@ -680,16 +681,18 @@ Table of Contents
    A or AAAA queries for destination domains.  If the client is using
    named destinations with a proxy that does not provide SVCB query
    capability (e.g. through an affiliated DNS resolver), the client
-   would have to perform SVCB queries though a separate resolver.  This
-   might disclose the client's destinations to an additional party,
-   creating privacy concerns.  If these concerns apply, the client
-   SHOULD disable SVCB resolution.
+   would have to perform SVCB resolution separately, likely disclosing
+   the destinations to additional parties.  Clients that support such
+   proxies SHOULD arrange for a separate SVCB resolution procedure with
+   appropriate privacy properties, or disable SVCB resolution entirely
+   if SVCB-optional.
 
    If the client does use SVCB and named destinations, the client SHOULD
    follow the standard SVCB resolution process, selecting the smallest-
    SvcPriority option that is compatible with the client and the proxy.
-   The client SHOULD provide the final TargetName and port to the proxy,
-   which will perform any required A and AAAA lookups.
+   When connecting using a SVCB record, clients MUST provide the final
+   TargetName and port to the proxy, which will perform any required A
+   and AAAA lookups.
 
    Providing the proxy with the final TargetName has several benefits:
 
@@ -710,9 +713,9 @@ Table of Contents
 
    When replying to a SVCB query, authoritative DNS servers SHOULD
    return A, AAAA, and SVCB records in the Additional Section for any
-   in-bailiwick TargetNames.  If the zone is signed, the server SHOULD
-   also include positive or negative DNSSEC responses for these records
-   in the Additional section.
+   TargetNames that are in the zone.  If the zone is signed, the server
+   SHOULD also include positive or negative DNSSEC responses for these
+   records in the Additional section.
 
 4.2.  Recursive resolvers
 
@@ -768,6 +771,35 @@ Table of Contents
    MUST accompany each RRSet in the Additional section with the same
    DNSSEC-related records that they would send when providing that RRSet
    as an Answer (e.g.  RRSIG, NSEC, NSEC3).
+
+4.4.  EDNS Client Subnet (ECS)
+
+   The EDNS Client Subnet extension (ECS, [RFC7871]) allows recursive
+   resolvers to request IP addresses that are suitable for a particular
+   client IP range.  IP addresses appear in two places in Authoritative
+   SVCB responses:
+
+   *  ipv*hint SvcParams in a ServiceMode response.  Clients only use
+      these hints when the recursive resolver does not provide A/AAAA
+      records for TargetName in the Additional section, as recommended
+      in Section 4.2.
+
+   *  A/AAAA records returned by the Authoritative server in the
+      Additional section of a SVCB response when TargetName is in-zone,
+      as recommended in Section 4.1.
+
+   A recursive resolver that uses ECS for A/AAAA queries SHOULD send the
+   same ECS prefix for SVCB queries unless it knows that any ipv*hint
+   SvcParams will not be used, due to the resolver's implementation of
+   Additional section processing.  To disable ECS for SVCB, such a
+   resolver SHOULD include an ECS extension with a SOURCE PREFIX-LENGTH
+   of zero, to indicate that ECS is supported but disabled.
+
+   According to Section 7.3.1 of [RFC7871], "Any records from [the
+   Additional section] MUST NOT be tied to a network".  Accordingly,
+   when responding to a SVCB query with the ECS extension, Authoritative
+   servers MAY omit these records to ensure that prefix-specific A/AAAA
+   records are returned by a subsequent or parallel query.
 
 5.  Performance optimizations
 
@@ -1242,9 +1274,9 @@ Table of Contents
 
    The SVCB "echconfig" parameter is defined for conveying the ECH
    configuration of an alternative endpoint.  In wire format, the value
-   of the parameter is an ECHConfigs vector [ECH], including the
-   redundant length prefix.  In presentation format, the value is a
-   single ECHConfigs encoded in Base64 [base64].  Base64 is used here to
+   of the parameter is an ECHConfigList [ECH], including the redundant
+   length prefix.  In presentation format, the value is a single
+   ECHConfigList encoded in Base64 [base64].  Base64 is used here to
    simplify integration with TLS server software.  To enable simpler
    parsing, this SvcParam MUST NOT contain escape sequences.
 
@@ -1615,73 +1647,70 @@ Table of Contents
 
    A registration MUST include the following fields:
 
-   *  Number: SvcParamKey wire format numeric identifier (range 0-65535)
+   *  Number: wire format numeric identifier (range 0-65535)
 
-   *  Name: SvcParamKey presentation name
+   *  Name: unique presentation name
 
    *  Meaning: a short description
 
-   *  Pointer to specification text
+   *  Format Reference: pointer to specification text
 
-   SvcParamKey entries to be added to this namespace have different
-   policies ([RFC8126], Section 4) based on their range:
+   The characters in the registered Name MUST be lower-case alphanumeric
+   or "-" (Section 2.1).  The name MUST NOT start with "key" or
+   "invalid".
 
-                 +=============+=========================+
-                 | Number      | IANA Policy             |
-                 +=============+=========================+
-                 | 0-255       | Standards Action        |
-                 +-------------+-------------------------+
-                 | 256-32767   | Expert Review           |
-                 +-------------+-------------------------+
-                 | 32768-65280 | First Come First Served |
-                 +-------------+-------------------------+
-                 | 65280-65534 | Private Use             |
-                 +-------------+-------------------------+
-                 | 65535       | Standards Action        |
-                 +-------------+-------------------------+
+   Entries in this registry are subject to a First Come First Served
+   registration policy ([RFC8126], Section 4.6).  The Format Reference
+   MUST specify how to convert the SvcParamValue's presentation format
+   to wire format and MAY detail its intended meaning and use.  An entry
+   MAY specify a Format Reference of the form "Same as (other key Name)"
+   if it uses the same presentation and wire formats as an existing key.
 
-                                  Table 1
-
-   Apart from the initial contents, the SvcParamKey name MUST NOT start
-   with "key".
+   This arrangement supports the development of new parameters while
+   ensuring that zone files can be made interoperable.
 
 14.3.2.  Initial contents
 
    The "Service Binding (SVCB) Parameter Registry" shall initially be
    populated with the registrations below:
 
-   +=============+=================+======================+===========+
-   | Number      | Name            | Meaning              | Reference |
-   +=============+=================+======================+===========+
-   | 0           | mandatory       | Mandatory keys in    | (This     |
-   |             |                 | this RR              | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 1           | alpn            | Additional supported | (This     |
-   |             |                 | protocols            | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 2           | no-default-alpn | No support for       | (This     |
-   |             |                 | default protocol     | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 3           | port            | Port for alternative | (This     |
-   |             |                 | endpoint             | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 4           | ipv4hint        | IPv4 address hints   | (This     |
-   |             |                 |                      | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 5           | echconfig       | Encrypted            | (This     |
-   |             |                 | ClientHello info     | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 6           | ipv6hint        | IPv6 address hints   | (This     |
-   |             |                 |                      | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 65280-65534 | keyNNNNN        | Private Use          | (This     |
-   |             |                 |                      | document) |
-   +-------------+-----------------+----------------------+-----------+
-   | 65535       | key65535        | Reserved ("Invalid   | (This     |
-   |             |                 | key")                | document) |
-   +-------------+-----------------+----------------------+-----------+
+   +=============+=================+================+=================+
+   | Number      | Name            | Meaning        | Format          |
+   |             |                 |                | Reference       |
+   +=============+=================+================+=================+
+   | 0           | mandatory       | Mandatory keys | (This document) |
+   |             |                 | in this RR     | Section 7       |
+   +-------------+-----------------+----------------+-----------------+
+   | 1           | alpn            | Additional     | (This document) |
+   |             |                 | supported      | Section 6.1     |
+   |             |                 | protocols      |                 |
+   +-------------+-----------------+----------------+-----------------+
+   | 2           | no-default-alpn | No support for | (This document) |
+   |             |                 | default        | Section 6.1     |
+   |             |                 | protocol       |                 |
+   +-------------+-----------------+----------------+-----------------+
+   | 3           | port            | Port for       | (This document) |
+   |             |                 | alternative    | Section 6.2     |
+   |             |                 | endpoint       |                 |
+   +-------------+-----------------+----------------+-----------------+
+   | 4           | ipv4hint        | IPv4 address   | (This document) |
+   |             |                 | hints          | Section 6.4     |
+   +-------------+-----------------+----------------+-----------------+
+   | 5           | echconfig       | Encrypted      | (This document) |
+   |             |                 | ClientHello    | Section 6.3     |
+   |             |                 | info           |                 |
+   +-------------+-----------------+----------------+-----------------+
+   | 6           | ipv6hint        | IPv6 address   | (This document) |
+   |             |                 | hints          | Section 6.4     |
+   +-------------+-----------------+----------------+-----------------+
+   | 65280-65534 | N/A             | Private Use    | (This document) |
+   +-------------+-----------------+----------------+-----------------+
+   | 65535       | N/A             | Reserved       | (This document) |
+   |             |                 | ("Invalid      |                 |
+   |             |                 | key")          |                 |
+   +-------------+-----------------+----------------+-----------------+
 
-                                 Table 2
+                                 Table 1
 
 14.4.  Registry updates
 
@@ -1697,7 +1726,7 @@ Table of Contents
    |       | Binding                                |                 |
    +-------+----------------------------------------+-----------------+
 
-                                 Table 3
+                                 Table 2
 
    Per [Attrleaf], please add the following entry to the DNS Underscore
    Global Scoped Entry Registry:
@@ -1708,7 +1737,7 @@ Table of Contents
        | HTTPS   | _https     | HTTPS SVCB info | (This document) |
        +---------+------------+-----------------+-----------------+
 
-                                 Table 4
+                                 Table 3
 
 15.  Acknowledgments and Related Proposals
 
@@ -1756,9 +1785,9 @@ Table of Contents
 
    [ECH]      Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
               Encrypted Client Hello", Work in Progress, Internet-Draft,
-              draft-ietf-tls-esni-09, 16 December 2020,
+              draft-ietf-tls-esni-10, 8 March 2021,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              esni-09.txt>.
+              esni-10.txt>.
 
    [HappyEyeballsV2]
               Schinazi, D. and T. Pauly, "Happy Eyeballs Version 2:
@@ -1835,6 +1864,11 @@ Table of Contents
               and Registration Procedures for URI Schemes", BCP 35,
               RFC 7595, DOI 10.17487/RFC7595, June 2015,
               <https://datatracker.ietf.org/doc/html/rfc7595>.
+
+   [RFC7871]  Contavalli, C., van der Gaast, W., Lawrence, D., and W.
+              Kumari, "Client Subnet in DNS Queries", RFC 7871,
+              DOI 10.17487/RFC7871, May 2016,
+              <https://datatracker.ietf.org/doc/html/rfc7871>.
 
    [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
               Writing an IANA Considerations Section in RFCs", BCP 26,
@@ -1986,7 +2020,7 @@ Appendix B.  HTTP Mapping Summary
             |                          | upgrade              |
             +--------------------------+----------------------+
 
-                                  Table 5
+                                  Table 4
 
    This table does not indicate any SvcParamKeys that servers are
    required to publish, or that clients are required to implement,
@@ -2065,6 +2099,18 @@ C.4.  Comparison with separate RR types for AliasMode and ServiceMode
    complexity.
 
 Appendix D.  Change history
+
+   *  draft-ietf-dnsop-svcb-https-04
+
+      -  Simplify the IANA instructions (pure First Come First Served)
+
+      -  Recommend against publishing chains of >8 aliases
+
+      -  Clarify requirements for using SVCB with a transport proxy
+
+      -  Adjust guidance for Port Prefix Naming
+
+      -  Minor editorial updates
 
    *  draft-ietf-dnsop-svcb-https-03
 
