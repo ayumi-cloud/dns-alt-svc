@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-03-17T14:41:51.137851+00:00",
+  "timestamp": "2021-03-24T02:09:45.713324+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -5290,10 +5290,12 @@
       "author": "enygren",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "proposed to close"
+      ],
       "body": "There may be a few other places we need to mention the implications of SVCB-optional vs mandatory protocols.  For example:\r\n\r\n* We should clarify that HTTPS is SVCB-optional by default (although that future specifications may build SVCB-required services on top of HTTPS)\r\n* We may wish to add this optional/mandatory status to the non-normative table on protocols\r\n* We should cover the implications on Proxies.  In-particular, for a SVCB-mandatory protocol a client MUST get a SVCB record prior to initiating a CONNECT (if only because this is needed to get the SvcDomainName), at least absent optimizations that may be defined in the future.\r\n\r\nThere may be others that jump out with a read for this in-mind.",
       "createdAt": "2021-02-17T15:44:15Z",
-      "updatedAt": "2021-02-18T20:03:30Z",
+      "updatedAt": "2021-03-18T01:37:15Z",
       "closedAt": null,
       "comments": [
         {
@@ -5511,7 +5513,7 @@
       "id": "MDU6SXNzdWU4MzM0MjgxNjE=",
       "title": "Why is the reserved key (65535) called \"invalid\"?",
       "url": "https://github.com/MikeBishop/dns-alt-svc/issues/305",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "marka63",
       "authorAssociation": "NONE",
       "assignees": [
@@ -5520,9 +5522,17 @@
       "labels": [],
       "body": "If the reserved key ever gets used having it be called \"invalid\" will cause interoperability problems because \"invalid\" doesn't have a well defined parsing method.  When you give a key a name it also requires a format definition to be specified otherwise you will have different parsers producing different results.\r\n\r\nI'm presuming if we ever get to the point where we need more named keys that these will end up being encoded, on the wire, inside this key.  If that happens we will need this key be printed out as key65535 whenever there is a unsupported named type inside this key and if they are all known they will be printed out individually.  The name \"invalid\" will never be used.",
       "createdAt": "2021-03-17T05:53:58Z",
-      "updatedAt": "2021-03-17T14:27:39Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2021-03-17T16:19:29Z",
+      "closedAt": "2021-03-17T16:19:29Z",
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I've posted #306 to remove this name.\r\n\r\nPersonally, I've found the \"invalid\" name to be somewhat useful when writing test cases, as a reserved name that is syntactically allowed but guaranteed not to collide with any future key.  However, it's true that it could introduce a special case in pretty-printing code, as you describe.  I've tried to split the difference by reserving the name \"invalid\" but not mapping it to any codepoint.\r\n\r\nIn case it's unclear, the purpose of the reservation is to allow code like\r\n```C\r\nuint16 get_key_code(const char* key_name) {\r\n    ...\r\n    return -1;  // Unrecognized or invalid key name\r\n}\r\n```\r\n\r\nOverloading it for extensibility might be safe, but it seems more confusing than allocating an ordinary codepoint for that purpose.",
+          "createdAt": "2021-03-17T14:58:38Z",
+          "updatedAt": "2021-03-17T14:58:38Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -23845,24 +23855,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTk0MjQ2ODQ2",
       "title": "Add release notes for -04",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/304",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2021-03-16T21:24:11Z",
-      "updatedAt": "2021-03-16T22:51:26Z",
+      "updatedAt": "2021-03-17T16:54:21Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "5b61912583c93a06215b980fa9b9e5aaa65f14a4",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-release-notes",
       "headRefOid": "4ffd05e79957234f601b1e8959459e0ed096f452",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-03-17T16:54:18Z",
+      "mergedAt": "2021-03-17T16:54:18Z",
+      "mergedBy": "bemasc",
+      "mergeCommit": {
+        "oid": "1b9fb2e671d04766595c81a5198e13472491c06c"
+      },
       "comments": [],
       "reviews": [
         {
@@ -23885,20 +23897,88 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTk0Nzc1NTY2",
       "title": "Remove the name for \"invalid\"",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/306",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bemasc",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Requested in #305",
       "createdAt": "2021-03-17T14:41:40Z",
-      "updatedAt": "2021-03-17T14:41:41Z",
+      "updatedAt": "2021-03-17T16:19:22Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "5b61912583c93a06215b980fa9b9e5aaa65f14a4",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-iana",
-      "headRefOid": "6533a4cc8270d58834d05bcb9e7ade11f71f4caf",
+      "headRefOid": "e6a70a42f9efd6d1491b219c58d1e123606b546c",
+      "closedAt": "2021-03-17T16:19:15Z",
+      "mergedAt": "2021-03-17T16:19:15Z",
+      "mergedBy": "bemasc",
+      "mergeCommit": {
+        "oid": "c9bcb05fb44cb2dafa7759a690e0ae13b91f4356"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE0NTA5NTEx",
+          "commit": {
+            "abbreviatedOid": "e6a70a4"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-17T16:06:35Z",
+          "updatedAt": "2021-03-17T16:06:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 307,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTk2NzM5NzM3",
+      "title": "Add some test-vectors",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/307",
+      "state": "OPEN",
+      "author": "pieterlexis",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As discussed on the mailinglist, this is a PR with test vectors. I've tried to explain each set of bytes in the wire format. Let me know if there's anything that needs changing.",
+      "createdAt": "2021-03-19T16:57:44Z",
+      "updatedAt": "2021-03-19T16:57:44Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
+      "headRepository": "pieterlexis/dns-alt-svc",
+      "headRefName": "test-vectors",
+      "headRefOid": "918c2522d9a6e1e02b72d40e699149d0c3471b87",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 308,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTk5MzE2NDY3",
+      "title": "Specify interaction with ECS",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/308",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This change explains how to make SVCB play nicely with ECS, for both\r\nrecursive and authoritative servers.  The proposed behavior is\r\nconservative, staying fully compliant with RFC 7871 (ECS) while allowing\r\nimproved caching performance when it is safe to do so.",
+      "createdAt": "2021-03-24T02:09:32Z",
+      "updatedAt": "2021-03-24T02:09:32Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-ecs",
+      "headRefOid": "e7cc12907f16e58bda07c7ffa5f4c3ae9b93f181",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
