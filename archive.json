@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-03-24T02:09:45.713324+00:00",
+  "timestamp": "2021-03-24T18:45:10.798348+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -23946,19 +23946,33 @@
       "labels": [],
       "body": "As discussed on the mailinglist, this is a PR with test vectors. I've tried to explain each set of bytes in the wire format. Let me know if there's anything that needs changing.",
       "createdAt": "2021-03-19T16:57:44Z",
-      "updatedAt": "2021-03-19T16:57:44Z",
+      "updatedAt": "2021-03-24T15:18:48Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
       "headRepository": "pieterlexis/dns-alt-svc",
       "headRefName": "test-vectors",
-      "headRefOid": "918c2522d9a6e1e02b72d40e699149d0c3471b87",
+      "headRefOid": "68bfcda3b37fe3ba3e629318ed33175800220ae1",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE5ODU5Mjc4",
+          "commit": {
+            "abbreviatedOid": "68bfcda"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks good to me.  I wonder if it would be clearer to use a little less whitespace in the RFC 3597 examples, to highlight the distinction between uint16, uint8, and bytestring sequences, but that's up to you.\r\n\r\nWaiting for another coauthor to confirm before merging.",
+          "createdAt": "2021-03-24T15:18:48Z",
+          "updatedAt": "2021-03-24T15:18:48Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 308,
@@ -23972,19 +23986,200 @@
       "labels": [],
       "body": "This change explains how to make SVCB play nicely with ECS, for both\r\nrecursive and authoritative servers.  The proposed behavior is\r\nconservative, staying fully compliant with RFC 7871 (ECS) while allowing\r\nimproved caching performance when it is safe to do so.",
       "createdAt": "2021-03-24T02:09:32Z",
-      "updatedAt": "2021-03-24T02:09:32Z",
+      "updatedAt": "2021-03-24T18:44:39Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-ecs",
-      "headRefOid": "e7cc12907f16e58bda07c7ffa5f4c3ae9b93f181",
+      "headRefOid": "063a815c6acbc539ef3e6586ee8f109043766a7d",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE5MjU2NTY0",
+          "commit": {
+            "abbreviatedOid": "e7cc129"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-24T02:29:16Z",
+          "updatedAt": "2021-03-24T02:29:16Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "I'm not sure I follow the \"unless it knows they will not be used\".  How does the resolver know that ipv*hint might not be used?",
+              "createdAt": "2021-03-24T02:29:16Z",
+              "updatedAt": "2021-03-24T18:44:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE5MjYwNTgz",
+          "commit": {
+            "abbreviatedOid": "e7cc129"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-24T02:39:40Z",
+          "updatedAt": "2021-03-24T02:39:41Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "Clients only use ipv*hint if the response doesn't include A+AAAA records for TargetName in the Additional section.  If the recursive resolver knows that it is going to include those additional address records in the response, then it knows the hints will never be used.",
+              "createdAt": "2021-03-24T02:39:40Z",
+              "updatedAt": "2021-03-24T18:44:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE5Mjc1Mzkw",
+          "commit": {
+            "abbreviatedOid": "e7cc129"
+          },
+          "author": "enygren",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-24T03:16:42Z",
+          "updatedAt": "2021-03-24T03:16:42Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "Where this gets confusing is with the subsequent guidance that records in the Additional section should not be included if ECS is being used.   Isn't the guidance effectively then \"Send ECS so SVCB records can be usable with ipv*hint.  Plan to not send Additional records.\" ?",
+              "createdAt": "2021-03-24T03:16:42Z",
+              "updatedAt": "2021-03-24T18:44:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE5MzczMDIy",
+          "commit": {
+            "abbreviatedOid": "e7cc129"
+          },
+          "author": "mmuhaime",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-24T06:48:18Z",
+          "updatedAt": "2021-03-24T06:48:18Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "I think the proposal is saying: \r\nwhen a recursive resolver does not include additional records for the client, it knows hints may be used by the client, so it needs to ensure that the ipv4hint answer is answered properly honoring ECS info. So the recursive needs to send ECS to the authorities. Whether the auths include additionals or not in this case (that is the the subject of \"According to Section 7.3.1 of {{!RFC7871}}, \" paragraph) does not matter because the recursive is not including the additionals in its response to the client anyway. \r\n\r\nWhen recursive resolver does include additional records for the client, ipv[46]hint should not be used, so the ipv[46]hint from auths don't need to vary by ECS, hence the /0 suggestion to avoid extra per-subnet caching. Additionally, the recommendation in the draft is for auths to not return additionals if they think the additionals should also vary by ECS (this is a general recommendation, not just for when an auth sees /0). The recursive, not finding additionals, will subsequently ask A/AAAA queries with proper ECS and will include ECS based answers in in its additional section that it sends to clients. I think the following is implicit: if auths do respond with additionals then recrusives will use those non-ECS based additionals in its response to the client. \r\n\r\nI think your recommendation about auths not responding with additionals when receiving ECS data for SVCB queries is the right thing to do.  \r\n\r\nSo overall the proposal looks ok but I am a little worried about the ipv4hint complexity (setting ECS source mask to /0). /0 is kind of a special case and I am worried that many auths will return non-ECS additionals when sent /0 and it will take time for people to realize and fix this for SVCB. Making recursives always send the same ECS prefix with SVCB (that is sent for A/AAAA) seems desirable from a reducing complexity point of view. ",
+              "createdAt": "2021-03-24T06:48:18Z",
+              "updatedAt": "2021-03-24T18:44:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE5NzQ0MTM3",
+          "commit": {
+            "abbreviatedOid": "e7cc129"
+          },
+          "author": "jdreed",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-24T13:52:41Z",
+          "updatedAt": "2021-03-24T13:52:41Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "I agree with Mashooq, I don't like the idea of the recursive potentially changing its ECS behavior for SVCB.  That's going to be a mess for debugging, and will potentially trigger some authoritative behavior that tries to infer whether the resolver supports ECS or not.  Sending a source prefix of 0 means \"I understand ECS, but I'm not going to use it\", and is used as a signal for a desire for privacy on the part of the end user.   I don't like the idea of overloading that for a SVCB-specific meaning.  \r\n\r\nRFC7871 is pretty clear about the circumstances under which a resolver that supports ECS would not send it:  a) when it's asking for a TLD/PSL; b) when it has learned that a given auth doesn't support ECS; c) when it is using an explicit ACL and the auth isn't on that list.  (b) is already pretty ambiguous and highly subjective, I'm not excited about adding another exception to that list.",
+              "createdAt": "2021-03-24T13:52:41Z",
+              "updatedAt": "2021-03-24T18:44:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE5ODQ1MzQy",
+          "commit": {
+            "abbreviatedOid": "e7cc129"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-24T15:08:11Z",
+          "updatedAt": "2021-03-24T15:08:11Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "@mmuhaime's interpretation matches my intent here.\r\n\r\nI don't think the \"/0\" behavior is too tricky for Authoritative servers: \"see ECS -> no Additional\" seems simpler than \"see ECS with nonzero prefix -> no Additional\".  I also don't think that this will take time to sort out.  Neither of these codepaths exists today, so if we clearly specify which behavior nameservers should implement, I think we can get it.  If we don't specify, we might get a mix of both.\r\n\r\n@jdreed Having different behavior for SVCB is entirely in line with RFC 7871, which says\r\n\r\n>   Implementations MAY also allow additional configuring of this based\r\n>   on other criteria, such as zone or query type.\r\n\r\nSending \"/0\" means \"I support ECS but I have disabled it for this query\".  That's exactly how this PR uses it.\r\n\r\nHere are some alternative designs:\r\n* ECS recursives send the same ECS for SVCB as they do for A/AAAA.  This significantly reduces cache efficiency when IP hints are included and the recursive resolver knows they will not be used (\"full service resolver\").\r\n  - Also bind A/AAAA in the Additional section to the ECS scope of the SVCB response.  This reduces latency (no followup query to get ECS A/AAAA) but violates (updates?) the letter of RFC 7871's prohibition against ECS in the Additional section.  (I don't think it violates the spirit: that requirement is for records that will be used by the recursive resolver itself, which these are not.)\r\n     * And also let full service resolvers treat all SVCB records as cacheable for \"/0\" (i.e. ECS applies _only_ to the Additional section).  This maximizes performance but substantially deviates from RFC 7871.\r\n* Let full service resolvers disable ECS for SVCB, but don't require nameservers to distinguish \"/0\" from \"no ECS\".  This has good caching efficiency but adds latency: it requires the resolver to ignore all Additional A/AAAA records if ECS could be used, even when ECS is not actually in use.",
+              "createdAt": "2021-03-24T15:08:11Z",
+              "updatedAt": "2021-03-24T18:44:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjE5ODY0OTA3",
+          "commit": {
+            "abbreviatedOid": "e7cc129"
+          },
+          "author": "jdreed",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-24T15:23:12Z",
+          "updatedAt": "2021-03-24T15:23:12Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "OK, fair, I think I misread this initially and thought it was proposing one case under which no ECS option would be sent (vs sending a /0), and that was the part I was most worried about.",
+              "createdAt": "2021-03-24T15:23:12Z",
+              "updatedAt": "2021-03-24T18:44:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjIwMDE1MDg1",
+          "commit": {
+            "abbreviatedOid": "e7cc129"
+          },
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-24T17:21:27Z",
+          "updatedAt": "2021-03-24T17:21:28Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "Possible improvement to help with any confusion over \"unless it knows they will not be used, due to resolver's implementation of Additional section processing\": maybe convert to something along the lines of \"unless it implements Additional section processing, and therefore knows they will be unnecessary to a client that properly prefers A/AAAA results over ipv*hint SvcParams\".  As written, the statement is kinda backwards in that it explains the justification (\"knows they will not be used\") before the clear, concise condition (\"implements Additional section processing\").",
+              "createdAt": "2021-03-24T17:21:28Z",
+              "updatedAt": "2021-03-24T18:44:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjIwMTA4NTE2",
+          "commit": {
+            "abbreviatedOid": "e7cc129"
+          },
+          "author": "mmuhaime",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-24T18:31:46Z",
+          "updatedAt": "2021-03-24T18:31:47Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "The original technical proposal seems good to me. I do like @ericorth 's wording better because I think it will make it easier to understand. \r\nWe could also use something like: \" If a recursive resolver knows that the client may use the ipv[46]hints, it should use the same ECS prefix for SVCB query that it uses for A/AAAA queries when questioning Authoritative servers.  \r\n If a recursive resolver knows that the client will not use ipv[46]hints, then it MAY include an ECS with a SOURCE PREFIX-LENGTH of zero to indicate that ECS is supported but disabled. One scenario where the recursive knows ipv[46]hints won't be used is when it includes resolved addresses for the SVCB target names in the additionals section in its response to clients.\" ",
+              "createdAt": "2021-03-24T18:31:46Z",
+              "updatedAt": "2021-03-24T18:44:39Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
