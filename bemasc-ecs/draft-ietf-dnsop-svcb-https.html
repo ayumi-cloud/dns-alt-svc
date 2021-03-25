@@ -1936,11 +1936,11 @@ section of a SVCB response when TargetName is in-zone, as recommended in
 </li>
         </ul>
 <p id="section-4.4-3">SVCB records SHOULD NOT otherwise vary based on ECS.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
-<p id="section-4.4-4">A recursive resolver that always returns A/AAAA records for TargetName in the
-Additional section, as recommended in <a href="#recursive-behavior" class="xref">Section 4.2</a>, SHOULD include
-an ECS option with a SOURCE PREFIX-LENGTH of zero in SVCB queries, to
-indicate that ECS is supported but is disabled for this query.  If the
-resolver might not return these Additional records, it SHOULD send the
+<p id="section-4.4-4">If the resolver plans to resolve A/AAAA records for TargetName and return
+them in the Additional section, as recommended in <a href="#recursive-behavior" class="xref">Section 4.2</a>,
+it SHOULD include an ECS option with a SOURCE PREFIX-LENGTH of zero in SVCB
+queries, to indicate that ECS is supported but is disabled for this query.
+If the resolver does not plan to perform this resolution, it SHOULD send the
 same ECS option that it would use for an A/AAAA query.<a href="#section-4.4-4" class="pilcrow">¶</a></p>
 <p id="section-4.4-5">According to Section 7.3.1 of <span>[<a href="#RFC7871" class="xref">RFC7871</a>]</span>, "Any records from [the
 Additional section] MUST NOT be tied to a network".  Accordingly,
