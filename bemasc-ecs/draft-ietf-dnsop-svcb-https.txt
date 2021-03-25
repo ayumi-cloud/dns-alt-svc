@@ -5,9 +5,9 @@
 DNSOP Working Group                                          B. Schwartz
 Internet-Draft                                                    Google
 Intended status: Standards Track                               M. Bishop
-Expires: 25 September 2021                                     E. Nygren
+Expires: 26 September 2021                                     E. Nygren
                                                      Akamai Technologies
-                                                           24 March 2021
+                                                           25 March 2021
 
 
  Service binding and parameter specification via the DNS (DNS SVCB and
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 September 2021.
+   This Internet-Draft will expire on 26 September 2021.
 
 Copyright Notice
 
@@ -774,7 +774,7 @@ Table of Contents
 
 4.4.  EDNS Client Subnet (ECS)
 
-   The EDNS Client Subnet extension (ECS, [RFC7871]) allows recursive
+   The EDNS Client Subnet option (ECS, [RFC7871]) allows recursive
    resolvers to request IP addresses that are suitable for a particular
    client IP range.  IP addresses appear in two places in Authoritative
    SVCB responses:
@@ -792,17 +792,17 @@ Table of Contents
 
    A recursive resolver that always returns A/AAAA records for
    TargetName in the Additional section, as recommended in Section 4.2,
-   SHOULD include an ECS extension with a SOURCE PREFIX-LENGTH of zero
-   in SVCB queries, to indicate that ECS is supported but is disabled
-   for this query.  If the resolver might not return these Additional
-   records, it SHOULD send the same ECS extension that it would use for
-   an A/AAAA query.
+   SHOULD include an ECS option with a SOURCE PREFIX-LENGTH of zero in
+   SVCB queries, to indicate that ECS is supported but is disabled for
+   this query.  If the resolver might not return these Additional
+   records, it SHOULD send the same ECS option that it would use for an
+   A/AAAA query.
 
    According to Section 7.3.1 of [RFC7871], "Any records from [the
    Additional section] MUST NOT be tied to a network".  Accordingly,
    resolvers SHOULD assume that any A/AAAA records in the Additional
    section are network-invariant.  When responding to a SVCB query with
-   an ECS extension (even one whose SOURCE PREFIX-LENGTH is zero), an
+   an ECS option (even one whose SOURCE PREFIX-LENGTH is zero), an
    Authoritative server SHOULD NOT add any A/AAAA records for TargetName
    to the response if TargetName has any A/AAAA records that are tied to
    a network.
