@@ -5,9 +5,9 @@
 DNSOP Working Group                                          B. Schwartz
 Internet-Draft                                                    Google
 Intended status: Standards Track                               M. Bishop
-Expires: 26 September 2021                                     E. Nygren
+Expires: 29 September 2021                                     E. Nygren
                                                      Akamai Technologies
-                                                           25 March 2021
+                                                           28 March 2021
 
 
  Service binding and parameter specification via the DNS (DNS SVCB and
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 September 2021.
+   This Internet-Draft will expire on 29 September 2021.
 
 Copyright Notice
 
@@ -717,6 +717,8 @@ Table of Contents
    SHOULD also include positive or negative DNSSEC responses for these
    records in the Additional section.
 
+   See Section 4.4 for exception.
+
 4.2.  Recursive resolvers
 
    Recursive resolvers that are aware of SVCB SHOULD help the client to
@@ -802,10 +804,11 @@ Table of Contents
    Additional section] MUST NOT be tied to a network".  Accordingly,
    resolvers SHOULD assume that any A/AAAA records in the Additional
    section are network-invariant.  When responding to a SVCB query with
-   an ECS option (even one whose SOURCE PREFIX-LENGTH is zero), an
-   Authoritative server SHOULD NOT add any A/AAAA records for TargetName
-   to the response if TargetName has any A/AAAA records that are tied to
-   a network.
+   an ECS option (even one whose SOURCE PREFIX-LENGTH is zero),
+   Authoritative servers must omit such records if they wish to serve
+   subnet-specific addresses.  Such Authoritative servers can avoid the
+   added latency of a followup query by setting TargetName to the value
+   recommended in Section 10.2.
 
 5.  Performance optimizations
 
