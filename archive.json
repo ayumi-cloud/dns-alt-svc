@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-03-31T17:02:54.569077+00:00",
+  "timestamp": "2021-04-06T14:52:49.056808+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -23962,7 +23962,7 @@
       "labels": [],
       "body": "As discussed on the mailinglist, this is a PR with test vectors. I've tried to explain each set of bytes in the wire format. Let me know if there's anything that needs changing.",
       "createdAt": "2021-03-19T16:57:44Z",
-      "updatedAt": "2021-03-30T01:03:29Z",
+      "updatedAt": "2021-04-06T13:12:36Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
@@ -24102,6 +24102,46 @@
               "updatedAt": "2021-03-29T17:08:15Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI4NzE1Mzcy",
+          "commit": {
+            "abbreviatedOid": "ef5473d"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-06T08:39:11Z",
+          "updatedAt": "2021-04-06T08:39:14Z",
+          "comments": [
+            {
+              "originalPosition": 110,
+              "body": "```suggestion\r\n    1 foo.example.com ipv6hint=\"2001:db8::1,2001:db8:ffff:ffff:ffff:ffff:203.0.113.255\"\r\n\r\n    \\# 55 (\r\n    00 01                                              ; priority\r\n    03 66 6f 6f 07 65 78 61 6d 70 6c 65 03 63 6f 6d 00 ; target\r\n    00 06                                              ; key 6\r\n    00 20                                              ; length 32\r\n    20 01 0d b8 00 00 00 00 00 00 00 00 00 00 00 01    ; first address\r\n    20 01 0d b8 ff ff ff ff ff ff ff ff cb 00 71 ff    ; second address\r\n    )\r\n\r\n    \\x00\\x01                                           # priority\r\n    \\x03foo\\x07example\\x03com\\x00                      # target\r\n    \\x00\\x06                                           # key 6\r\n    \\x00\\x20                                           # length 32\r\n    \\x20\\x01\\x0d\\xb8\\x00\\x00\\x00\\x00\r\n         \\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x01              # first address\r\n    \\x20\\x01\\x0d\\xb8\\xff\\xff\\xff\\xff\r\n         \\xff\\xff\\xff\\xff\\xcb\\x00\\x71\\xff              # second address\r\n```\r\n\r\nA suggestion for IPv4 mapped IPv6 that also crosses the 39 characters boundry of IPv6 addresses represented as string that would be the max string size if IPv4 mapped IPv6 was not anticipated.",
+              "createdAt": "2021-04-06T08:39:11Z",
+              "updatedAt": "2021-04-06T08:39:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI4OTUyNTAw",
+          "commit": {
+            "abbreviatedOid": "ef5473d"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-06T13:12:35Z",
+          "updatedAt": "2021-04-06T13:12:36Z",
+          "comments": [
+            {
+              "originalPosition": 110,
+              "body": "Works for me (as long as that line isn't too wide for TXT format).",
+              "createdAt": "2021-04-06T13:12:36Z",
+              "updatedAt": "2021-04-06T13:12:36Z"
+            }
+          ]
         }
       ]
     },
@@ -24117,13 +24157,13 @@
       "labels": [],
       "body": "This change explains how to make SVCB play nicely with ECS, for both\r\nrecursive and authoritative servers.  The proposed behavior is\r\nconservative, staying fully compliant with RFC 7871 (ECS) while allowing\r\nimproved caching performance when it is safe to do so.",
       "createdAt": "2021-03-24T02:09:32Z",
-      "updatedAt": "2021-03-31T17:02:28Z",
+      "updatedAt": "2021-04-06T14:52:21Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
       "headRepository": "MikeBishop/dns-alt-svc",
       "headRefName": "bemasc-ecs",
-      "headRefOid": "3fede4bcaaaff3a77864bfabdc4db7e01c3355a8",
+      "headRefOid": "1a0afa021e778df1d19a2a5a560e3e5680cae365",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -24135,6 +24175,13 @@
           "body": "Thanks for the feedback, everyone.  There have been several requests for a simpler version that permits more creative use of ECS, so I've drawn up #309 as an alternative.  Please take a look.\r\n\r\nThis is a confusing topic.  Hopefully, #309 will help make it clearer that\r\n1. The ECS-conditional behavior for authoritative servers is unavoidable because Additional records always have an implicit SCOPE PREFIX-LENGTH of zero.\r\n2. The key question is whether full-service resolvers MUST, SHOULD, MAY, or SHOULD NOT send the same ECS on SVCB as A/AAAA.  This is essentially a tradeoff between cache efficiency (SHOULD NOT) and usage flexibility (SHOULD/MUST).",
           "createdAt": "2021-03-29T02:14:55Z",
           "updatedAt": "2021-03-29T02:14:55Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "It seems that we have consensus to support non-address variation with ECS (e.g. ECS-dependent CNAME), so I've merged #309, which simplifies this PR by removing the cache optimization.",
+          "createdAt": "2021-03-31T17:04:18Z",
+          "updatedAt": "2021-03-31T17:04:18Z"
         }
       ],
       "reviews": [
@@ -24154,7 +24201,7 @@
               "originalPosition": 34,
               "body": "I'm not sure I follow the \"unless it knows they will not be used\".  How does the resolver know that ipv*hint might not be used?",
               "createdAt": "2021-03-24T02:29:16Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24174,7 +24221,7 @@
               "originalPosition": 34,
               "body": "Clients only use ipv*hint if the response doesn't include A+AAAA records for TargetName in the Additional section.  If the recursive resolver knows that it is going to include those additional address records in the response, then it knows the hints will never be used.",
               "createdAt": "2021-03-24T02:39:40Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24194,7 +24241,7 @@
               "originalPosition": 34,
               "body": "Where this gets confusing is with the subsequent guidance that records in the Additional section should not be included if ECS is being used.   Isn't the guidance effectively then \"Send ECS so SVCB records can be usable with ipv*hint.  Plan to not send Additional records.\" ?",
               "createdAt": "2021-03-24T03:16:42Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24214,7 +24261,7 @@
               "originalPosition": 34,
               "body": "I think the proposal is saying: \r\nwhen a recursive resolver does not include additional records for the client, it knows hints may be used by the client, so it needs to ensure that the ipv4hint answer is answered properly honoring ECS info. So the recursive needs to send ECS to the authorities. Whether the auths include additionals or not in this case (that is the the subject of \"According to Section 7.3.1 of {{!RFC7871}}, \" paragraph) does not matter because the recursive is not including the additionals in its response to the client anyway. \r\n\r\nWhen recursive resolver does include additional records for the client, ipv[46]hint should not be used, so the ipv[46]hint from auths don't need to vary by ECS, hence the /0 suggestion to avoid extra per-subnet caching. Additionally, the recommendation in the draft is for auths to not return additionals if they think the additionals should also vary by ECS (this is a general recommendation, not just for when an auth sees /0). The recursive, not finding additionals, will subsequently ask A/AAAA queries with proper ECS and will include ECS based answers in in its additional section that it sends to clients. I think the following is implicit: if auths do respond with additionals then recrusives will use those non-ECS based additionals in its response to the client. \r\n\r\nI think your recommendation about auths not responding with additionals when receiving ECS data for SVCB queries is the right thing to do.  \r\n\r\nSo overall the proposal looks ok but I am a little worried about the ipv4hint complexity (setting ECS source mask to /0). /0 is kind of a special case and I am worried that many auths will return non-ECS additionals when sent /0 and it will take time for people to realize and fix this for SVCB. Making recursives always send the same ECS prefix with SVCB (that is sent for A/AAAA) seems desirable from a reducing complexity point of view. ",
               "createdAt": "2021-03-24T06:48:18Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24234,7 +24281,7 @@
               "originalPosition": 34,
               "body": "I agree with Mashooq, I don't like the idea of the recursive potentially changing its ECS behavior for SVCB.  That's going to be a mess for debugging, and will potentially trigger some authoritative behavior that tries to infer whether the resolver supports ECS or not.  Sending a source prefix of 0 means \"I understand ECS, but I'm not going to use it\", and is used as a signal for a desire for privacy on the part of the end user.   I don't like the idea of overloading that for a SVCB-specific meaning.  \r\n\r\nRFC7871 is pretty clear about the circumstances under which a resolver that supports ECS would not send it:  a) when it's asking for a TLD/PSL; b) when it has learned that a given auth doesn't support ECS; c) when it is using an explicit ACL and the auth isn't on that list.  (b) is already pretty ambiguous and highly subjective, I'm not excited about adding another exception to that list.",
               "createdAt": "2021-03-24T13:52:41Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24254,7 +24301,7 @@
               "originalPosition": 34,
               "body": "@mmuhaime's interpretation matches my intent here.\r\n\r\nI don't think the \"/0\" behavior is too tricky for Authoritative servers: \"see ECS -> no Additional\" seems simpler than \"see ECS with nonzero prefix -> no Additional\".  I also don't think that this will take time to sort out.  Neither of these codepaths exists today, so if we clearly specify which behavior nameservers should implement, I think we can get it.  If we don't specify, we might get a mix of both.\r\n\r\n@jdreed Having different behavior for SVCB is entirely in line with RFC 7871, which says\r\n\r\n>   Implementations MAY also allow additional configuring of this based\r\n>   on other criteria, such as zone or query type.\r\n\r\nSending \"/0\" means \"I support ECS but I have disabled it for this query\".  That's exactly how this PR uses it.\r\n\r\nHere are some alternative designs:\r\n* ECS recursives send the same ECS for SVCB as they do for A/AAAA.  This significantly reduces cache efficiency when IP hints are included and the recursive resolver knows they will not be used (\"full service resolver\").\r\n  - Also bind A/AAAA in the Additional section to the ECS scope of the SVCB response.  This reduces latency (no followup query to get ECS A/AAAA) but violates (updates?) the letter of RFC 7871's prohibition against ECS in the Additional section.  (I don't think it violates the spirit: that requirement is for records that will be used by the recursive resolver itself, which these are not.)\r\n     * And also let full service resolvers treat all SVCB records as cacheable for \"/0\" (i.e. ECS applies _only_ to the Additional section).  This maximizes performance but substantially deviates from RFC 7871.\r\n* Let full service resolvers disable ECS for SVCB, but don't require nameservers to distinguish \"/0\" from \"no ECS\".  This has good caching efficiency but adds latency: it requires the resolver to ignore all Additional A/AAAA records if ECS could be used, even when ECS is not actually in use.",
               "createdAt": "2021-03-24T15:08:11Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24274,7 +24321,7 @@
               "originalPosition": 34,
               "body": "OK, fair, I think I misread this initially and thought it was proposing one case under which no ECS option would be sent (vs sending a /0), and that was the part I was most worried about.",
               "createdAt": "2021-03-24T15:23:12Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24294,7 +24341,7 @@
               "originalPosition": 34,
               "body": "Possible improvement to help with any confusion over \"unless it knows they will not be used, due to resolver's implementation of Additional section processing\": maybe convert to something along the lines of \"unless it implements Additional section processing, and therefore knows they will be unnecessary to a client that properly prefers A/AAAA results over ipv*hint SvcParams\".  As written, the statement is kinda backwards in that it explains the justification (\"knows they will not be used\") before the clear, concise condition (\"implements Additional section processing\").",
               "createdAt": "2021-03-24T17:21:28Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24314,7 +24361,7 @@
               "originalPosition": 34,
               "body": "The original technical proposal seems good to me. I do like @ericorth 's wording better because I think it will make it easier to understand. \r\nWe could also use something like: \" If a recursive resolver knows that the client may use the ipv[46]hints, it should use the same ECS prefix for SVCB query that it uses for A/AAAA queries when questioning Authoritative servers.  \r\n If a recursive resolver knows that the client will not use ipv[46]hints, then it MAY include an ECS with a SOURCE PREFIX-LENGTH of zero to indicate that ECS is supported but disabled. One scenario where the recursive knows ipv[46]hints won't be used is when it includes resolved addresses for the SVCB target names in the additionals section in its response to clients.\" ",
               "createdAt": "2021-03-24T18:31:46Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24334,7 +24381,7 @@
               "originalPosition": 34,
               "body": "OK, I've reworked the text for clarity based on the feedback in this thread.",
               "createdAt": "2021-03-24T18:45:54Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24367,7 +24414,7 @@
               "originalPosition": 32,
               "body": "Would it be acceptable to encode geo information into a TargetName based on ECS?  Or to not include QUIC in ASNs where QUIC is known to be broken?  What is the rationale for this SHOULD NOT?",
               "createdAt": "2021-03-24T23:50:11Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24387,7 +24434,7 @@
               "originalPosition": 40,
               "body": "Do we also want a bullet/entry suggesting that recursive resolvers implementing ECS for client performance MAY/SHOULD disable sending Additional A/AAAA records to clients in-favor of being able to use ECS to authorities?  The DNS performance may be better but the overall experience/performance could be much worse. ",
               "createdAt": "2021-03-24T23:53:46Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24407,7 +24454,7 @@
               "originalPosition": 32,
               "body": "The behavior described here means that many (most?) ECS-capable resolvers will send \"/0\" in SVCB queries, so any attempt to make use of ECS for those features will fail.\r\n\r\nAlso, the majority of resolvers simply don't do ECS at all, so ECS generally is not usable for anything other than performance optimizations.",
               "createdAt": "2021-03-25T00:10:43Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24427,7 +24474,7 @@
               "originalPosition": 40,
               "body": "I don't think that makes sense.  If the recursive resolver disables ECS for SVCB, clients will still be using ECS-derived A and AAAA records, so connection performance should not be impaired.",
               "createdAt": "2021-03-25T00:13:27Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24447,19 +24494,19 @@
               "originalPosition": 34,
               "body": "Suggest rewording: \"A recursive resolver that performs A/AAAA resolution for TargetName, as recommended in {{recursive-behavior}}, SHOULD ...\" to clarify the resolution is the key part - there may/may not be A/AAAA records added to the response for other reasons (NODATA, query failures/timeouts).",
               "createdAt": "2021-03-24T21:41:07Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             },
             {
               "originalPosition": 38,
               "body": "Similarly reword: \"If the resolver does not perform TargetName resolution, ...\".",
               "createdAt": "2021-03-24T21:42:23Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             },
             {
               "originalPosition": 39,
               "body": "ECS extension -> ECS option.\r\n\r\nOther places too.",
               "createdAt": "2021-03-25T19:16:00Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24479,7 +24526,7 @@
               "originalPosition": 39,
               "body": "Done",
               "createdAt": "2021-03-25T21:01:33Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24499,7 +24546,7 @@
               "originalPosition": 34,
               "body": "OK, changed to \"If the resolver plans to resolve A/AAAA records for TargetName and return them in the Additional section, ...\".",
               "createdAt": "2021-03-25T21:12:02Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24519,7 +24566,7 @@
               "originalPosition": 38,
               "body": "OK, changed to \"If the resolver does not plan to perform this resolution...\".",
               "createdAt": "2021-03-25T21:12:06Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24539,7 +24586,7 @@
               "originalPosition": 32,
               "body": "What is the reasoning here? The HTTPSSVC record has great potentials for DNS steering with the use of the priority field to favor closer location while providing some higher latency fallback locations.\r\n\r\nDefining per qtype behavior for ECS will also add complexity and is most likely unexpected by most auth DNS operators.",
               "createdAt": "2021-03-25T22:18:55Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24559,7 +24606,7 @@
               "originalPosition": 32,
               "body": "DNS steering with priority is allowed within this rule.  It would look like\r\n```dns\r\n; static\r\nwww.example.com HTTPS IN 600 1 .\r\n                             2 fallback.example.com.\r\n; ECS-controlled\r\nwww.example.com AAAA ...\r\nfallback.example.com AAAA ...\r\n```\r\n\r\nFrom the auth side, the per-QTYPE behavior here is only for authoritative servers that already have per-QTYPE behavior for SVCB (appending the Additional A/AAA records).  Arguably, this is not actually per-QTYPE behavior: the same logic applies to MX and SRV, if anyone wanted to use ECS with them, because they do the same trick of putting A/AAAA in Additional, and Additional can't use ECS.",
               "createdAt": "2021-03-26T14:04:04Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24579,7 +24626,7 @@
               "originalPosition": 32,
               "body": "For what it's worth, there are also plenty of places where ECS will get used today\r\non CNAME records that end up pointing to SVCB records.  For example\r\nthe following will be part of a very common deployment path that is widely used today:\r\n\r\n```\r\nwww.foo.example. CNAME IN 600 foo.georedir.example.net.\r\nfoo.georedir.example.net CNAME IN 600 foo.cdn.example.\r\nfoo.cdn.example. HTTPS IN 600 ...\r\nfoo.cdn.example. A IN 600 ...\r\nfoo.cdn.example. AAAA IN 600 ...\r\n```\r\n\r\nIn this case, \"foo.georedir.example.net.\" may be doing multi-CDN splitting\r\nbased on client geo/asn and using ECS as part of this.  \r\nAs such, having a \"SHOULD NOT\" for ECS with SVCB seems likely\r\nto be problematic since the authority here issuing the SVCB has no control\r\nover whether a CNAME pointing to it is using ECS.\r\n\r\nJust changing the A/AAAA case won't help when the protocols may need \r\nto vary (eg, \"ISP ___ in the US breaks QUIC by randomly dropping UDP\r\nand thus we don't want to offer it for clients in their ASN\").\r\n",
               "createdAt": "2021-03-26T14:53:10Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24599,7 +24646,7 @@
               "originalPosition": 32,
               "body": "> DNS steering with priority is allowed within this rule. It would look like\r\n> \r\n> ```\r\n> ; static\r\n> www.example.com HTTPS IN 600 1 .\r\n>                              2 fallback.example.com.\r\n> ; ECS-controlled\r\n> www.example.com AAAA ...\r\n> fallback.example.com AAAA ...\r\n> ```\r\n\r\nThat will requires two round trips from the resolver to the auth, assuming the resolver supports filling the iphints or worse, RTT from the client when resolver support is missing. We are losing a latency improvement opportunity here, where the auth could just provide a self contained response to minimize traffic and latency while doing steering. \r\n\r\nI think iphint from auth is especially important in the context of DNS steering as those A/AAAA have limited TTL and thus, those additional round trips won't be the exception.\r\n\r\nTo me the only reason for adding this clause is economical on the resolver side. Having a new popular qtype with ECS cache split can be expensive, especially for a huge resolver like quad8. If that's the motivation, it should be stated clearly, as I see no purely technical reason for this change.",
               "createdAt": "2021-03-26T15:30:08Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24619,7 +24666,7 @@
               "originalPosition": 51,
               "body": "```suggestion\r\nMUST omit such records if they wish to serve subnet-specific addresses.\r\n```\r\n\r\n???",
               "createdAt": "2021-03-28T19:23:52Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24639,7 +24686,7 @@
               "originalPosition": 32,
               "body": "@enygren\r\n> For what it's worth, there are also plenty of places where ECS will get used today on CNAME records\r\n\r\nI think ECS-variant CNAMEs should probably have been banned in the ECS spec, and this seems like a good opportunity to start phasing them out.  However, if we decide that they should be well-supported, then you're right that we need ECS on the SVCB queries.  I've drawn up #309 to show what I think that would look like.\r\n\r\n> Just changing the A/AAAA case won't help when the protocols may need\r\n> to vary (eg, \"ISP ___ in the US breaks QUIC by randomly dropping UDP\r\n> and thus we don't want to offer it for clients in their ASN\").\r\n\r\nYuck.  You can't rely on ECS, so clients need to handle this anyway.  Any network of this kind is horribly broken, so we shouldn't be trying to put in performance optimizations for it.\r\n\r\n@rs\r\n> That will requires two round trips from the resolver to the auth\r\n\r\nThe number of roundtrips actually has nothing to do with whether the resolver is allowed to disable ECS.  I made a slight text update that I hope makes the reasoning clearer; you can also look at #309.\r\n\r\n> To me the only reason for adding this clause is economical on the resolver side. Having a new popular qtype with ECS cache split can be expensive\r\n\r\nYes, the motivation is cache performance, but the resolver can operate with any cache size it likes, so it's not exactly an \"expense\".  Even with an infinite cache size, unnecessary use of ECS harms performance for users, by making cache hits less likely.",
               "createdAt": "2021-03-29T02:02:19Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24659,7 +24706,7 @@
               "originalPosition": 51,
               "body": "\"MUST if you wish\" in all-caps seems strange to me.",
               "createdAt": "2021-03-29T02:17:24Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24679,7 +24726,7 @@
               "originalPosition": 32,
               "body": "> @enygren\r\n> \r\n> > For what it's worth, there are also plenty of places where ECS will get used today on CNAME records\r\n> \r\n> I think ECS-variant CNAMEs should probably have been banned in the ECS spec, and this seems like a good opportunity to start phasing them out. However, if we decide that they should be well-supported, then you're right that we need ECS on the SVCB queries. I've drawn up #309 to show what I think that would look like.\r\n\r\nFWIW CNAME processing is mentioned in RFC 7871 (section 7.2.1). Quote:\r\n   Since some queries can result in multiple RRsets being added to the\r\n   response, there is an unfortunate ambiguity from the original\r\n   specification as to how SCOPE PREFIX-LENGTH would apply to each\r\n   individual RRset.  For example, multiple types in response to an ANY\r\n   metaquery could all have different applicable SCOPE PREFIX-LENGTH\r\n   values, but this protocol only has the ability to signal one.  The\r\n   response SHOULD therefore, include the longest relevant PREFIX-LENGTH\r\n   of any RRset in the answer, which could have the unfortunate side\r\n   effect of redundantly caching some data that could be cached more\r\n   broadly.  For the specific case of a Canonical Name (CNAME) chain,\r\n   the Authoritative Nameserver SHOULD only place the initial CNAME\r\n   record in the Answer section, to have it cached unambiguously and\r\n   appropriately. Most modern Recursive Resolvers restart the query\r\n   with the CNAME, so the remainder of the chain is typically ignored\r\n   anyway.  For message-focused resolvers, rather than RRset-focused\r\n   ones, this will mean caching the entire CNAME chain at the longest\r\n   PREFIX-LENGTH of any RRset in the chain.\r\n\r\nThere is no mention of the scope to use for the CNAME response which would imply a non-zero scope is allowed. It does however recommend splitting the response across CNAME, requested RR if the prefix-length scope is different (especially if the CNAME scope is /0) for more efficient caching. It will be good to have reference to this section and a similar recommendation to split CNAME, SVCB alias, SVCB target RRs with different ECS scopes.\r\n\r\n> \r\n> > Just changing the A/AAAA case won't help when the protocols may need\r\n> > to vary (eg, \"ISP ___ in the US breaks QUIC by randomly dropping UDP\r\n> > and thus we don't want to offer it for clients in their ASN\").\r\n> \r\n> Yuck. You can't rely on ECS, so clients need to handle this anyway. Any network of this kind is horribly broken, so we shouldn't be trying to put in performance optimizations for it.\r\n> \r\n> @rs\r\n> \r\n> > That will requires two round trips from the resolver to the auth\r\n> \r\n> The number of roundtrips actually has nothing to do with whether the resolver is allowed to disable ECS. I made a slight text update that I hope makes the reasoning clearer; you can also look at #309.\r\n> \r\n> > To me the only reason for adding this clause is economical on the resolver side. Having a new popular qtype with ECS cache split can be expensive\r\n> \r\n> Yes, the motivation is cache performance, but the resolver can operate with any cache size it likes, so it's not exactly an \"expense\". Even with an infinite cache size, unnecessary use of ECS harms performance for users, by making cache hits less likely.\r\n\r\n",
               "createdAt": "2021-03-30T21:35:03Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         },
@@ -24699,7 +24746,87 @@
               "originalPosition": 32,
               "body": "Suggested wording to put the ECS RFC text first and the recommendations for auth, recursive after that. Keeping this here instead of in #309 since all the discussion is here.\r\n\r\n```suggestion\r\nSVCB records may contain IP addresses (in ipv*hint SvcParams),\r\nor direct users to a TargetName. In these cases, a recursive\r\nresolver and authoritative server can use ECS [expand] to request and\r\nreceive answers suitable for a particular client IP range.\r\n\r\nAccording to Section 7.3.1 of RFC7871, \"Any records from \\[the\r\nAdditional section\\] MUST NOT be tied to a network\". In addition,\r\nSection 7.2.1 states \"For the specific case of a Canonical Name (CNAME) chain,\r\nthe Authoritative Nameserver SHOULD only place the initial CNAME\r\nrecord in the Answer section, to have it cached unambiguously and\r\nappropriately.\". This is meant to allow caching different RRs at the\r\nappropriate scope prefix-length by a resolver.\r\n\r\nAccordingly, authoritative servers SHOULD not include additional RRs\r\nin a response to an HTTPS query if their prefix-length scope is\r\ndifferent from the first RR in the response (which could be a CNAME or an SVCB record). A recursive resolver SHOULD include the same ECS option in SVCB queries as in A/AAAA queries.\r\n```",
               "createdAt": "2021-03-30T21:41:27Z",
-              "updatedAt": "2021-03-31T17:02:28Z"
+              "updatedAt": "2021-04-06T14:52:21Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjIwODgx",
+          "commit": {
+            "abbreviatedOid": "57be5d9"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-31T18:57:39Z",
+          "updatedAt": "2021-03-31T18:57:39Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "Thanks for the suggestion.  I've incorporated these references in https://github.com/MikeBishop/dns-alt-svc/pull/308/commits/9e0fe746a458fdd2bf7f63d0c357009efcfdb428.",
+              "createdAt": "2021-03-31T18:57:39Z",
+              "updatedAt": "2021-04-06T14:52:21Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjIxMzkx",
+          "commit": {
+            "abbreviatedOid": "9e0fe74"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-31T18:58:15Z",
+          "updatedAt": "2021-03-31T18:58:16Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "I've reworded this so that a normative MUST now makes sense.",
+              "createdAt": "2021-03-31T18:58:15Z",
+              "updatedAt": "2021-04-06T14:52:21Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjM3MTIy",
+          "commit": {
+            "abbreviatedOid": "9e0fe74"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-31T19:18:21Z",
+          "updatedAt": "2021-03-31T19:18:21Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "Here's an alternative interpretation of \"MUST NOT be tied to a network\".  This might allow more use of Additional records, resulting in lower latency.\r\n\r\n@puneetsood FYI\r\n\r\n```suggestion\r\nSOURCE PREFIX-LENGTH zero and SCOPE PREFIX-LENGTH as specified\r\nin the ECS option, and MAY cache them on this basis.  Authoritative\r\nservers MUST omit such records if they are not suitable\r\nfor use by any stub resolvers that set SOURCE PREFIX-LENGTH to zero.\r\n```",
+              "createdAt": "2021-03-31T19:18:21Z",
+              "updatedAt": "2021-04-06T14:52:21Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI5MDU3MjUy",
+          "commit": {
+            "abbreviatedOid": "9e0fe74"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-06T14:42:02Z",
+          "updatedAt": "2021-04-06T14:42:02Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "On reflection, I'm leaning toward this interpretation, because it makes it more likely that we can revise RFC 7871 in the future to make these records ECS-enabled without creating a compatibility problem.",
+              "createdAt": "2021-04-06T14:42:02Z",
+              "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
         }
