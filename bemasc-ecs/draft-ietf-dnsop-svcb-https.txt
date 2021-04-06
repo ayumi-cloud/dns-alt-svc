@@ -5,9 +5,9 @@
 DNSOP Working Group                                          B. Schwartz
 Internet-Draft                                                    Google
 Intended status: Standards Track                               M. Bishop
-Expires: 2 October 2021                                        E. Nygren
+Expires: 8 October 2021                                        E. Nygren
                                                      Akamai Technologies
-                                                           31 March 2021
+                                                            6 April 2021
 
 
  Service binding and parameter specification via the DNS (DNS SVCB and
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 October 2021.
+   This Internet-Draft will expire on 8 October 2021.
 
 Copyright Notice
 
@@ -786,11 +786,13 @@ Table of Contents
    According to Section 7.3.1 of [RFC7871], "Any records from [the
    Additional section] MUST NOT be tied to a network".  Accordingly,
    resolvers SHOULD treat any records in the Additional section as
-   having SCOPE PREFIX-LENGTH zero, and MAY cache them on this basis.
-   Authoritative servers MUST omit such records if they are not suitable
-   for global use.  This will cause the resolver to perform a followup
-   query that can receive properly tailored ECS.  (This is similar to
-   the usage of CNAME with ECS discussed in [RFC7871] Section 7.2.1.)
+   having SOURCE PREFIX-LENGTH zero and SCOPE PREFIX-LENGTH as specified
+   in the ECS option, and MAY cache them on this basis.  Authoritative
+   servers MUST omit such records if they are not suitable for use by
+   any stub resolvers that set SOURCE PREFIX-LENGTH to zero.  This will
+   cause the resolver to perform a followup query that can receive
+   properly tailored ECS.  (This is similar to the usage of CNAME with
+   ECS discussed in [RFC7871] Section 7.2.1.)
 
    Authoritative servers that omit Additional records can avoid the
    added latency of a followup query by following the advice in
