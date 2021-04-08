@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-04-06T14:52:49.056808+00:00",
+  "timestamp": "2021-04-08T14:39:07.103071+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -23962,7 +23962,7 @@
       "labels": [],
       "body": "As discussed on the mailinglist, this is a PR with test vectors. I've tried to explain each set of bytes in the wire format. Let me know if there's anything that needs changing.",
       "createdAt": "2021-03-19T16:57:44Z",
-      "updatedAt": "2021-04-06T13:12:36Z",
+      "updatedAt": "2021-04-07T15:58:12Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
@@ -24043,6 +24043,20 @@
           "body": "@bwelling correct.  For example, you can spell `port=123` as `key3=\\000\\123`. ",
           "createdAt": "2021-03-30T01:03:29Z",
           "updatedAt": "2021-03-30T01:03:29Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "NONE",
+          "body": "FYI, we're planning to create a pull request including the commits in this one, with some failure cases added",
+          "createdAt": "2021-04-07T08:54:25Z",
+          "updatedAt": "2021-04-07T08:54:25Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@pieterlexis Should we close this in favor of #312?",
+          "createdAt": "2021-04-07T15:58:11Z",
+          "updatedAt": "2021-04-07T15:58:11Z"
         }
       ],
       "reviews": [
@@ -24102,46 +24116,6 @@
               "updatedAt": "2021-03-29T17:08:15Z"
             }
           ]
-        },
-        {
-          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI4NzE1Mzcy",
-          "commit": {
-            "abbreviatedOid": "ef5473d"
-          },
-          "author": "wtoorop",
-          "authorAssociation": "NONE",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2021-04-06T08:39:11Z",
-          "updatedAt": "2021-04-06T08:39:14Z",
-          "comments": [
-            {
-              "originalPosition": 110,
-              "body": "```suggestion\r\n    1 foo.example.com ipv6hint=\"2001:db8::1,2001:db8:ffff:ffff:ffff:ffff:203.0.113.255\"\r\n\r\n    \\# 55 (\r\n    00 01                                              ; priority\r\n    03 66 6f 6f 07 65 78 61 6d 70 6c 65 03 63 6f 6d 00 ; target\r\n    00 06                                              ; key 6\r\n    00 20                                              ; length 32\r\n    20 01 0d b8 00 00 00 00 00 00 00 00 00 00 00 01    ; first address\r\n    20 01 0d b8 ff ff ff ff ff ff ff ff cb 00 71 ff    ; second address\r\n    )\r\n\r\n    \\x00\\x01                                           # priority\r\n    \\x03foo\\x07example\\x03com\\x00                      # target\r\n    \\x00\\x06                                           # key 6\r\n    \\x00\\x20                                           # length 32\r\n    \\x20\\x01\\x0d\\xb8\\x00\\x00\\x00\\x00\r\n         \\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x01              # first address\r\n    \\x20\\x01\\x0d\\xb8\\xff\\xff\\xff\\xff\r\n         \\xff\\xff\\xff\\xff\\xcb\\x00\\x71\\xff              # second address\r\n```\r\n\r\nA suggestion for IPv4 mapped IPv6 that also crosses the 39 characters boundry of IPv6 addresses represented as string that would be the max string size if IPv4 mapped IPv6 was not anticipated.",
-              "createdAt": "2021-04-06T08:39:11Z",
-              "updatedAt": "2021-04-06T08:39:14Z"
-            }
-          ]
-        },
-        {
-          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI4OTUyNTAw",
-          "commit": {
-            "abbreviatedOid": "ef5473d"
-          },
-          "author": "bemasc",
-          "authorAssociation": "COLLABORATOR",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2021-04-06T13:12:35Z",
-          "updatedAt": "2021-04-06T13:12:36Z",
-          "comments": [
-            {
-              "originalPosition": 110,
-              "body": "Works for me (as long as that line isn't too wide for TXT format).",
-              "createdAt": "2021-04-06T13:12:36Z",
-              "updatedAt": "2021-04-06T13:12:36Z"
-            }
-          ]
         }
       ]
     },
@@ -24157,7 +24131,7 @@
       "labels": [],
       "body": "This change explains how to make SVCB play nicely with ECS, for both\r\nrecursive and authoritative servers.  The proposed behavior is\r\nconservative, staying fully compliant with RFC 7871 (ECS) while allowing\r\nimproved caching performance when it is safe to do so.",
       "createdAt": "2021-03-24T02:09:32Z",
-      "updatedAt": "2021-04-06T14:52:21Z",
+      "updatedAt": "2021-04-07T01:11:58Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
@@ -24829,6 +24803,66 @@
               "updatedAt": "2021-04-06T14:52:21Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI5MDk5OTcy",
+          "commit": {
+            "abbreviatedOid": "1a0afa0"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-06T15:17:35Z",
+          "updatedAt": "2021-04-06T15:17:35Z",
+          "comments": [
+            {
+              "originalPosition": 40,
+              "body": "I've reworked the text since this comment.  It now discusses this topic (line 679).",
+              "createdAt": "2021-04-06T15:17:35Z",
+              "updatedAt": "2021-04-06T15:17:35Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI5NDY1ODkw",
+          "commit": {
+            "abbreviatedOid": "1a0afa0"
+          },
+          "author": "puneetsood",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-06T22:45:40Z",
+          "updatedAt": "2021-04-06T22:45:41Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "https://tools.ietf.org/html/rfc2181#section-5.4.1 recommends not forwarding Additional section records to clients.\r\n\r\n_**Unauthenticated RRs received and cached from the least trustworthy of\r\nthose groupings, that is data from the additional data section, and\r\ndata from the authority section of a non-authoritative answer, should\r\nnot be cached in such a way that they would ever be returned as\r\nanswers to a received query.  They may be returned as additional\r\ninformation where appropriate.  Ignoring this would allow the\r\ntrustworthiness of relatively untrustworthy data to be increased\r\nwithout cause or excuse.**_\r\n\r\nTherefore the recommendation:\r\n_**Accordingly,\r\nresolvers SHOULD treat any records in the Additional section as having\r\nSOURCE PREFIX-LENGTH zero and SCOPE PREFIX-LENGTH as specified\r\nin the ECS option, and MAY cache them on this basis.**_\r\n\r\nis unlikely to have an impact in the real world - popular DNS resolvers/implementations (e.g. Quad{189}, OpenDNS) do not propagate the ECS information to their clients (stubs mentioned here). This can be seen in the handling of MX records.\r\n\r\n$ dig @ns1.google.com -t MX google.com +nostats\r\n<snip>\r\n;; ANSWER SECTION:\r\ngoogle.com.\t\t600\tIN\tMX\t20 alt1.aspmx.l.google.com.\r\ngoogle.com.\t\t600\tIN\tMX\t30 alt2.aspmx.l.google.com.\r\ngoogle.com.\t\t600\tIN\tMX\t50 alt4.aspmx.l.google.com.\r\ngoogle.com.\t\t600\tIN\tMX\t10 aspmx.l.google.com.\r\ngoogle.com.\t\t600\tIN\tMX\t40 alt3.aspmx.l.google.com.\r\n\r\n;; ADDITIONAL SECTION:\r\nalt1.aspmx.l.google.com. 293\tIN\tA\t173.194.216.26\r\nalt1.aspmx.l.google.com. 293\tIN\tAAAA\t2607:f8b0:400c:c12::1a\r\nalt2.aspmx.l.google.com. 293\tIN\tA\t64.233.186.26\r\nalt2.aspmx.l.google.com. 293\tIN\tAAAA\t2800:3f0:4003:c00::1a\r\nalt4.aspmx.l.google.com. 293\tIN\tA\t172.253.120.26\r\nalt4.aspmx.l.google.com. 293\tIN\tAAAA\t2a00:1450:400c:c01::1a\r\naspmx.l.google.com.\t293\tIN\tA\t142.250.123.26\r\naspmx.l.google.com.\t293\tIN\tAAAA\t2607:f8b0:4023:1402::1a\r\nalt3.aspmx.l.google.com. 293\tIN\tA\t209.85.203.26\r\nalt3.aspmx.l.google.com. 293\tIN\tAAAA\t2a00:1450:400b:c03::1a\r\n\r\n$ dig @9.9.9.9 -t MX google.com +nostats\r\n<snip>\r\n;; ANSWER SECTION:\r\ngoogle.com.\t\t600\tIN\tMX\t10 aspmx.l.google.com.\r\ngoogle.com.\t\t600\tIN\tMX\t20 alt1.aspmx.l.google.com.\r\ngoogle.com.\t\t600\tIN\tMX\t40 alt3.aspmx.l.google.com.\r\ngoogle.com.\t\t600\tIN\tMX\t50 alt4.aspmx.l.google.com.\r\ngoogle.com.\t\t600\tIN\tMX\t30 alt2.aspmx.l.google.com.\r\n ",
+              "createdAt": "2021-04-06T22:45:41Z",
+              "updatedAt": "2021-04-06T22:45:41Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI5NTE5NTgz",
+          "commit": {
+            "abbreviatedOid": "1a0afa0"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T01:11:58Z",
+          "updatedAt": "2021-04-07T01:11:58Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "Thanks for investigating that.  I didn't know about RFC 2181.\r\n\r\nI think the text you quoted is (surprisingly?) in line with this draft.\r\n\r\n> **Unauthenticated** RRs ... from the additional data section ... should\r\n> not be cached in such a way that they would ever be returned as\r\n> answers\r\n\r\nSVCB Section 4.1:\r\n> If the zone is signed, the server SHOULD also include positive or negative DNSSEC responses for these records in the Additional section.\r\n\r\nSo these Additional records could actually end up cached and used for general purposes.\r\n\r\nRFC 2181\r\n> They may be returned as additional information where appropriate.\r\n\r\nSVCB Section 4.2:\r\n> ... adding all useful RRs from the response to the Additional section\r\n\r\nSo even without authentication, we're using these records as recommended in RFC 2181.\r\n\r\nThanks for showing an easy way to check the real world behavior.\r\n> ... popular DNS resolvers/implementations (e.g. Quad{189}, OpenDNS) do not propagate the ECS information to their clients\r\n\r\nI think they do not propagate any Additional data to their clients.  That seems like a compliant, but perhaps not highly optimized behavior.  A highly optimized resolver could comply with RFC 2181 by maintaining a separate cache for records returned in the Additional section, to be used only when populating the Additional section of responses (when appropriate).  If that cache assumes SCOPE /0, only global records can go in the Additional section, whereas if it assumes SOURCE /0, authoritative servers can safely return ECS-tailored Additional records.\r\n\r\nAs a practical matter this may be moot in current implementations, but as a matter of requirements I think the text here still makes sense.",
+              "createdAt": "2021-04-07T01:11:58Z",
+              "updatedAt": "2021-04-07T01:11:58Z"
+            }
+          ]
         }
       ]
     },
@@ -24873,6 +24907,427 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 311,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjEwMTMzNzMx",
+      "title": "Add an example of HTTPS with a non-default port",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/311",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Suggested by @sftcd",
+      "createdAt": "2021-04-06T20:00:09Z",
+      "updatedAt": "2021-04-06T20:48:08Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-prefix",
+      "headRefOid": "420b8b66d5f3041d465acedb2a8602ee7899bcec",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI5Mzk1OTU4",
+          "commit": {
+            "abbreviatedOid": "420b8b6"
+          },
+          "author": "Habbie",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-04-06T20:48:08Z",
+          "updatedAt": "2021-04-06T20:48:08Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 312,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjEwNTIyMTU0",
+      "title": "Test vectors with failure cases",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/312",
+      "state": "OPEN",
+      "author": "wtoorop",
+      "authorAssociation": "FIRST_TIME_CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This includes Pieter Lexis' test vectors and has some additional failure cases added.",
+      "createdAt": "2021-04-07T09:55:10Z",
+      "updatedAt": "2021-04-08T13:59:14Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
+      "headRepository": "NLnetLabs/dns-alt-svc",
+      "headRefName": "test-vectors-with-failure-cases",
+      "headRefOid": "56fa32208ae48075d30ddabddf505e0667960e3a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "wtoorop",
+          "authorAssociation": "NONE",
+          "body": "More commits with more failure cases (from @TCY16) will follow shortly...",
+          "createdAt": "2021-04-07T09:56:01Z",
+          "updatedAt": "2021-04-07T09:56:01Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Do we have an example of a published RFC with such a detailed catalog of invalid test vectors?  If not, perhaps it's inappropriate for a standards document.  After all, we are not trying to ship a complete test suite.",
+          "createdAt": "2021-04-08T00:11:18Z",
+          "updatedAt": "2021-04-08T00:11:18Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "NONE",
+          "body": "Hi @bemasc , I can't think of a RFC from head, but I know that two ZONEMD implementations completely missed that they should not try to validate, and *fail* verification when there are two ZONEMD RR's with the same algorithm in a zone. A test-vector for the failure case would probably have prevented that, as implementations tend to copy and use those in their test suits. \r\n\r\nWhat would be a good reason to not include them?\r\nDo you want me to ask the workgroup again about whether they think it should be included or not?\r\n\r\nAlso, @pieterlexis' test-vectors already payed off! Because both the ldns implementation and the Net::DNS implementation missed that alpn values have to be escaped and unescaped twice!",
+          "createdAt": "2021-04-08T08:01:28Z",
+          "updatedAt": "2021-04-08T08:03:29Z"
+        },
+        {
+          "author": "TCY16",
+          "authorAssociation": "NONE",
+          "body": "Hi @bemasc,\r\n\r\nI do get what you\u2019re saying about the complete test suite and agree that some are slightly trivial, though I think there is still added value of including at least some of the tests. \r\nI started this list mainly for the NSD test suite, but as both you and @marka63 pointed out, there were some mistakes/improvements. By adding a subset of these tests me and @wtoorop hope that other implementers are less prone to incorrect implementations.\r\n\r\nDo you disagree?",
+          "createdAt": "2021-04-08T10:48:28Z",
+          "updatedAt": "2021-04-08T12:06:36Z"
+        },
+        {
+          "author": "moonshiner",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree with @TCY16 - we should more inclusive with the examples.  They seem to trivial to us, but we are not the people whom will reading this and attempting to updating their DNS zone data.   Trivial examples are the turtles folks will use to reach the next set of turtles. \r\n\r\n(speaking only for myself)",
+          "createdAt": "2021-04-08T11:15:49Z",
+          "updatedAt": "2021-04-08T11:15:49Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMwMTAwNjU5",
+          "commit": {
+            "abbreviatedOid": "827d625"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T14:44:38Z",
+          "updatedAt": "2021-04-07T14:44:38Z",
+          "comments": [
+            {
+              "originalPosition": 241,
+              "body": "No, this record is perfectly valid.  \"automatically mandatory\" means \"if these keys are present, clients must act as if they were in the `mandatory=...` list\".",
+              "createdAt": "2021-04-07T14:44:38Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMwMTAxNTA5",
+          "commit": {
+            "abbreviatedOid": "827d625"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T14:45:19Z",
+          "updatedAt": "2021-04-07T14:45:20Z",
+          "comments": [
+            {
+              "originalPosition": 249,
+              "body": "As your text notes, this is a \"should not\", so the record is not invalid.",
+              "createdAt": "2021-04-07T14:45:20Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMwMTI0NzYz",
+          "commit": {
+            "abbreviatedOid": "4dfe4db"
+          },
+          "author": "TCY16",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T15:04:12Z",
+          "updatedAt": "2021-04-07T15:04:13Z",
+          "comments": [
+            {
+              "originalPosition": 241,
+              "body": "Removed",
+              "createdAt": "2021-04-07T15:04:12Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMwMTI1MTI5",
+          "commit": {
+            "abbreviatedOid": "4dfe4db"
+          },
+          "author": "TCY16",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T15:04:32Z",
+          "updatedAt": "2021-04-07T15:04:32Z",
+          "comments": [
+            {
+              "originalPosition": 249,
+              "body": "and removed, thanks for the feedback Ben!",
+              "createdAt": "2021-04-07T15:04:32Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMwNDQ5MjM4",
+          "commit": {
+            "abbreviatedOid": "4dfe4db"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T18:56:36Z",
+          "updatedAt": "2021-04-07T18:59:58Z",
+          "comments": [
+            {
+              "originalPosition": 206,
+              "body": "```suggestion\r\nThis example has multiple instances of the same\r\n```",
+              "createdAt": "2021-04-07T18:56:36Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            },
+            {
+              "originalPosition": 219,
+              "body": "```suggestion\r\nThe \"no-default-alpn\" SvcParamKey value MUST be empty ({{alpn-key}}).\r\n```",
+              "createdAt": "2021-04-07T18:57:49Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            },
+            {
+              "originalPosition": 227,
+              "body": "```suggestion\r\nThe \"mandatory\" SvcParamKey MUST not be included in mandatory\r\n```",
+              "createdAt": "2021-04-07T18:58:44Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMwNjY2MjM5",
+          "commit": {
+            "abbreviatedOid": "4dfe4db"
+          },
+          "author": "marka63",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T21:53:09Z",
+          "updatedAt": "2021-04-07T21:53:10Z",
+          "comments": [
+            {
+              "originalPosition": 216,
+              "body": "These should be done in individual records rather than 1 record to ensure proper error detection.",
+              "createdAt": "2021-04-07T21:53:09Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMwNjY4MDQy",
+          "commit": {
+            "abbreviatedOid": "4dfe4db"
+          },
+          "author": "marka63",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T21:54:28Z",
+          "updatedAt": "2021-04-07T21:54:29Z",
+          "comments": [
+            {
+              "originalPosition": 216,
+              "body": "Add keyXXX forms as well.",
+              "createdAt": "2021-04-07T21:54:28Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMwNjczMDE3",
+          "commit": {
+            "abbreviatedOid": "4dfe4db"
+          },
+          "author": "marka63",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T21:57:45Z",
+          "updatedAt": "2021-04-07T21:57:45Z",
+          "comments": [
+            {
+              "originalPosition": 116,
+              "body": "This may need to done in multi-line format to allow it to fit nicely into .txt format.",
+              "createdAt": "2021-04-07T21:57:45Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMwNjc0NzQ0",
+          "commit": {
+            "abbreviatedOid": "4dfe4db"
+          },
+          "author": "marka63",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-07T21:58:44Z",
+          "updatedAt": "2021-04-07T21:58:44Z",
+          "comments": [
+            {
+              "originalPosition": 216,
+              "body": "add mandatory to the list.",
+              "createdAt": "2021-04-07T21:58:44Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxMjQ1Mzg4",
+          "commit": {
+            "abbreviatedOid": "de2b769"
+          },
+          "author": "TCY16",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T10:46:00Z",
+          "updatedAt": "2021-04-08T10:46:00Z",
+          "comments": [
+            {
+              "originalPosition": 216,
+              "body": "resolved",
+              "createdAt": "2021-04-08T10:46:00Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxMjQ1NDI0",
+          "commit": {
+            "abbreviatedOid": "de2b769"
+          },
+          "author": "TCY16",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T10:46:03Z",
+          "updatedAt": "2021-04-08T10:46:03Z",
+          "comments": [
+            {
+              "originalPosition": 216,
+              "body": "resolved",
+              "createdAt": "2021-04-08T10:46:03Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxMjQ1NTI4",
+          "commit": {
+            "abbreviatedOid": "de2b769"
+          },
+          "author": "TCY16",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T10:46:10Z",
+          "updatedAt": "2021-04-08T10:46:11Z",
+          "comments": [
+            {
+              "originalPosition": 216,
+              "body": "resolved",
+              "createdAt": "2021-04-08T10:46:10Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxMjQ2MjIz",
+          "commit": {
+            "abbreviatedOid": "de2b769"
+          },
+          "author": "TCY16",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T10:46:59Z",
+          "updatedAt": "2021-04-08T10:47:00Z",
+          "comments": [
+            {
+              "originalPosition": 116,
+              "body": "This _should_ fit the .txt file as it is lined out to be on the exact maximum",
+              "createdAt": "2021-04-08T10:46:59Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNDI4NDE2",
+          "commit": {
+            "abbreviatedOid": "de2b769"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T13:57:18Z",
+          "updatedAt": "2021-04-08T13:57:18Z",
+          "comments": [
+            {
+              "originalPosition": 221,
+              "body": "```suggestion\r\n    example.com.   SVCB   1 foo.example.com. key123\r\n```",
+              "createdAt": "2021-04-08T13:57:18Z",
+              "updatedAt": "2021-04-08T13:59:14Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 313,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjExNjE2MjIz",
+      "title": "Relax requirements for resolvers and SvcParams",
+      "url": "https://github.com/MikeBishop/dns-alt-svc/pull/313",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It's probably better for everyone if resolvers don't inspect the\r\nSvcParams, but it's not really a requirement, and it has been a\r\ncontroversial point due to implementation details and RDATA-based\r\nfiltering.",
+      "createdAt": "2021-04-08T14:38:15Z",
+      "updatedAt": "2021-04-08T14:38:15Z",
+      "baseRepository": "MikeBishop/dns-alt-svc",
+      "baseRefName": "master",
+      "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
+      "headRepository": "MikeBishop/dns-alt-svc",
+      "headRefName": "bemasc-should-not-alter",
+      "headRefOid": "aa185473c362c253f2b9960d0841aa87b9ff19e3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
