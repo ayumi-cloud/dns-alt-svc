@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-04-08T14:39:07.103071+00:00",
+  "timestamp": "2021-04-09T17:07:40.066566+00:00",
   "repo": "MikeBishop/dns-alt-svc",
   "labels": [
     {
@@ -23955,21 +23955,21 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTk2NzM5NzM3",
       "title": "Add some test-vectors",
       "url": "https://github.com/MikeBishop/dns-alt-svc/pull/307",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "pieterlexis",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As discussed on the mailinglist, this is a PR with test vectors. I've tried to explain each set of bytes in the wire format. Let me know if there's anything that needs changing.",
       "createdAt": "2021-03-19T16:57:44Z",
-      "updatedAt": "2021-04-07T15:58:12Z",
+      "updatedAt": "2021-04-08T14:54:40Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
       "headRepository": "pieterlexis/dns-alt-svc",
       "headRefName": "test-vectors",
       "headRefOid": "ef5473d2e597818789cf1bb92f78a2af892c0b62",
-      "closedAt": null,
+      "closedAt": "2021-04-08T14:54:40Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -24960,13 +24960,13 @@
       "labels": [],
       "body": "This includes Pieter Lexis' test vectors and has some additional failure cases added.",
       "createdAt": "2021-04-07T09:55:10Z",
-      "updatedAt": "2021-04-08T13:59:14Z",
+      "updatedAt": "2021-04-09T13:19:20Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
       "headRepository": "NLnetLabs/dns-alt-svc",
       "headRefName": "test-vectors-with-failure-cases",
-      "headRefOid": "56fa32208ae48075d30ddabddf505e0667960e3a",
+      "headRefOid": "51a6bcc67ddc0dafbf163bc99c87d5a8d9d5e2bd",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -25025,7 +25025,7 @@
               "originalPosition": 241,
               "body": "No, this record is perfectly valid.  \"automatically mandatory\" means \"if these keys are present, clients must act as if they were in the `mandatory=...` list\".",
               "createdAt": "2021-04-07T14:44:38Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25045,7 +25045,7 @@
               "originalPosition": 249,
               "body": "As your text notes, this is a \"should not\", so the record is not invalid.",
               "createdAt": "2021-04-07T14:45:20Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25065,7 +25065,7 @@
               "originalPosition": 241,
               "body": "Removed",
               "createdAt": "2021-04-07T15:04:12Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25085,7 +25085,7 @@
               "originalPosition": 249,
               "body": "and removed, thanks for the feedback Ben!",
               "createdAt": "2021-04-07T15:04:32Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25105,19 +25105,19 @@
               "originalPosition": 206,
               "body": "```suggestion\r\nThis example has multiple instances of the same\r\n```",
               "createdAt": "2021-04-07T18:56:36Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             },
             {
               "originalPosition": 219,
               "body": "```suggestion\r\nThe \"no-default-alpn\" SvcParamKey value MUST be empty ({{alpn-key}}).\r\n```",
               "createdAt": "2021-04-07T18:57:49Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             },
             {
               "originalPosition": 227,
               "body": "```suggestion\r\nThe \"mandatory\" SvcParamKey MUST not be included in mandatory\r\n```",
               "createdAt": "2021-04-07T18:58:44Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25137,7 +25137,7 @@
               "originalPosition": 216,
               "body": "These should be done in individual records rather than 1 record to ensure proper error detection.",
               "createdAt": "2021-04-07T21:53:09Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25157,7 +25157,7 @@
               "originalPosition": 216,
               "body": "Add keyXXX forms as well.",
               "createdAt": "2021-04-07T21:54:28Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25177,7 +25177,7 @@
               "originalPosition": 116,
               "body": "This may need to done in multi-line format to allow it to fit nicely into .txt format.",
               "createdAt": "2021-04-07T21:57:45Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25197,7 +25197,7 @@
               "originalPosition": 216,
               "body": "add mandatory to the list.",
               "createdAt": "2021-04-07T21:58:44Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25217,7 +25217,7 @@
               "originalPosition": 216,
               "body": "resolved",
               "createdAt": "2021-04-08T10:46:00Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25237,7 +25237,7 @@
               "originalPosition": 216,
               "body": "resolved",
               "createdAt": "2021-04-08T10:46:03Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25257,7 +25257,7 @@
               "originalPosition": 216,
               "body": "resolved",
               "createdAt": "2021-04-08T10:46:10Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25277,7 +25277,7 @@
               "originalPosition": 116,
               "body": "This _should_ fit the .txt file as it is lined out to be on the exact maximum",
               "createdAt": "2021-04-08T10:46:59Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
         },
@@ -25297,9 +25297,174 @@
               "originalPosition": 221,
               "body": "```suggestion\r\n    example.com.   SVCB   1 foo.example.com. key123\r\n```",
               "createdAt": "2021-04-08T13:57:18Z",
-              "updatedAt": "2021-04-08T13:59:14Z"
+              "updatedAt": "2021-04-09T13:19:20Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNTAxODU3",
+          "commit": {
+            "abbreviatedOid": "56fa322"
+          },
+          "author": "pieterlexis",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T14:56:52Z",
+          "updatedAt": "2021-04-08T14:56:53Z",
+          "comments": [
+            {
+              "originalPosition": 215,
+              "body": "Another failure case would be:\r\n\r\n```\r\n     example.com.   SVCB   1 foo.example.com. mandatory=\r\n```",
+              "createdAt": "2021-04-08T14:56:52Z",
+              "updatedAt": "2021-04-09T13:19:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNTE5NTEz",
+          "commit": {
+            "abbreviatedOid": "56fa322"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "OK, it sounds like there is a lot of interest in including invalid RDATA.",
+          "createdAt": "2021-04-08T15:11:29Z",
+          "updatedAt": "2021-04-08T15:16:24Z",
+          "comments": [
+            {
+              "originalPosition": 219,
+              "body": "This is a tricky one.  The param indicates a valid SVCB `echconfig` parameter whose value is \"\" (which is what you get when you base64-decode \"\").\r\n\r\nOf course, \"\" is currently not a valid ECHConfigList, and is unlikely to be, but the ECH specification is not final.  In any event, I don't think there's an obligation for zone file parsers to check whether the ECHConfigList is valid, which may be difficult if they're not linked to an ECH-capable TLS library.",
+              "createdAt": "2021-04-08T15:11:29Z",
+              "updatedAt": "2021-04-09T13:19:20Z"
+            },
+            {
+              "originalPosition": 221,
+              "body": "This is definitely allowed.  `key123` could someday be registered as a key that uses an empty value.  Until it's registered, zone files can't apply any limits.",
+              "createdAt": "2021-04-08T15:12:20Z",
+              "updatedAt": "2021-04-09T13:19:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNTMwMjM4",
+          "commit": {
+            "abbreviatedOid": "56fa322"
+          },
+          "author": "pieterlexis",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T15:20:39Z",
+          "updatedAt": "2021-04-08T15:20:40Z",
+          "comments": [
+            {
+              "originalPosition": 221,
+              "body": "I know an earlier draft mentioned that empty generic keys were not allowed and only no-default-alpn was defined as having no value? I can't seem to find this kind of wording in the 04 draft.",
+              "createdAt": "2021-04-08T15:20:40Z",
+              "updatedAt": "2021-04-09T13:19:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNTM3OTAw",
+          "commit": {
+            "abbreviatedOid": "56fa322"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T15:27:02Z",
+          "updatedAt": "2021-04-08T15:27:02Z",
+          "comments": [
+            {
+              "originalPosition": 221,
+              "body": "I don't recall a limit like that.  Perhaps an early draft implied that this should be spelled `key123=\"\"`, but there is no such requirement now.",
+              "createdAt": "2021-04-08T15:27:02Z",
+              "updatedAt": "2021-04-09T13:19:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNzgzOTI0",
+          "commit": {
+            "abbreviatedOid": "56fa322"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "Suggestions based on review comments from @bemasc ",
+          "createdAt": "2021-04-08T19:59:47Z",
+          "updatedAt": "2021-04-08T20:01:50Z",
+          "comments": [
+            {
+              "originalPosition": 221,
+              "body": "```suggestion\r\n```\r\nkeyXXX SvcParam do not have to have values",
+              "createdAt": "2021-04-08T19:59:47Z",
+              "updatedAt": "2021-04-09T13:19:20Z"
+            },
+            {
+              "originalPosition": 219,
+              "body": "```suggestion\r\n```\r\nAllow for empty echconfig lists. Because ECH spec is not final.",
+              "createdAt": "2021-04-08T20:01:19Z",
+              "updatedAt": "2021-04-09T13:19:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNzg4MTEz",
+          "commit": {
+            "abbreviatedOid": "6d57b73"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T20:05:31Z",
+          "updatedAt": "2021-04-08T20:05:31Z",
+          "comments": [
+            {
+              "originalPosition": 219,
+              "body": "Removed that one.",
+              "createdAt": "2021-04-08T20:05:31Z",
+              "updatedAt": "2021-04-09T13:19:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNzg4MzU5",
+          "commit": {
+            "abbreviatedOid": "6d57b73"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-04-08T20:05:51Z",
+          "updatedAt": "2021-04-08T20:05:52Z",
+          "comments": [
+            {
+              "originalPosition": 221,
+              "body": "Removed this line too.",
+              "createdAt": "2021-04-08T20:05:52Z",
+              "updatedAt": "2021-04-09T13:19:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNzk3NjYw",
+          "commit": {
+            "abbreviatedOid": "6d57b73"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Waiting for coauthor approval.",
+          "createdAt": "2021-04-08T20:18:45Z",
+          "updatedAt": "2021-04-08T20:18:45Z",
+          "comments": []
         }
       ]
     },
@@ -25315,7 +25480,7 @@
       "labels": [],
       "body": "It's probably better for everyone if resolvers don't inspect the\r\nSvcParams, but it's not really a requirement, and it has been a\r\ncontroversial point due to implementation details and RDATA-based\r\nfiltering.",
       "createdAt": "2021-04-08T14:38:15Z",
-      "updatedAt": "2021-04-08T14:38:15Z",
+      "updatedAt": "2021-04-08T14:46:09Z",
       "baseRepository": "MikeBishop/dns-alt-svc",
       "baseRefName": "master",
       "baseRefOid": "1b9fb2e671d04766595c81a5198e13472491c06c",
@@ -25327,7 +25492,21 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjMxNDg4NjIx",
+          "commit": {
+            "abbreviatedOid": "aa18547"
+          },
+          "author": "vcunat",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-04-08T14:46:09Z",
+          "updatedAt": "2021-04-08T14:46:09Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
